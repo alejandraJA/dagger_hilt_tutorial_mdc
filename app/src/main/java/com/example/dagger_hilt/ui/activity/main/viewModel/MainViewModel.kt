@@ -1,4 +1,4 @@
-package com.example.dagger_hilt.ui.activity.main
+package com.example.dagger_hilt.ui.activity.main.viewModel
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel

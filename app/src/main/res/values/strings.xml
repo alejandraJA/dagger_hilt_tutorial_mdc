@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Dagger-Hilt</string>
-    <string name="action">Action</string>
-    <string name="refresh_quotes">refresh quotes</string>
     <string name="poster_path">Poster Path</string>
+    <string name="login_now">Login now</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">login</string>
+    <string name="do_you_have_an_account">Do you have an account</string>
+    <string name="sing_in">Sing in</string>
 </resources>

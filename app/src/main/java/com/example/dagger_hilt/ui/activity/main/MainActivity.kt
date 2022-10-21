@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.dagger_hilt.data.datasource.database.entities.MovieEntity
 import com.example.dagger_hilt.databinding.ActivityMainBinding
 import com.example.dagger_hilt.ui.activity.main.adapter.MovieAdapter
+import com.example.dagger_hilt.ui.activity.main.viewModel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

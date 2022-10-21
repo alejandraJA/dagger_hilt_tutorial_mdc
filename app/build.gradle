@@ -19,63 +19,20 @@ android {
     }
 
     buildTypes {
-        /**
-         * VARIANT TO DEPLOY AND SIGN IN PRODUCTION.
-         * WEB SERVICE -> /NewServicioAndroid
-         */
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            // This variable must *NOT* be changed without permissions
-            buildConfigField "String", "WS_SERVICE", "\"/NewServicioAndroid\""
-            buildConfigField "String", "URL_BASE", "\"http://pageandroid.dyndns.org/\""
-            buildConfigField "boolean", "IS_CUBOS", "false"
+            buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
+            buildConfigField "String", "API_KEY", "\"f1d25ec5c0f90889e99aff4ab6a492ad\""
+            buildConfigField "String", "BASE_URL_IMEGES", "\"https://image.tmdb.org/t/p/w500\""
         }
-
-        /**
-         * VARIANT FOR HOT FIXES. DEBUG IN RELEASE VARIANT. *USE ONLY WITH* AUTHORIZATION
-         * WEB SERVICE -> /NewServicioAndroid
-         */
-        releaseDebug {
-            initWith debug
-            debuggable true
-            applicationIdSuffix ".releaseDebug"
-            versionNameSuffix "-rd"
-            // This variable must *NOT* be changed without permissions
-            buildConfigField "String", "WS_SERVICE", "\"/NewServicioAndroid\""
-            buildConfigField "String", "URL_BASE", "\"http://pageandroid.dyndns.org/\""
-            buildConfigField "boolean", "IS_CUBOS", "false"
-        }
-
-        /**
-         * VARIANT TO BLACK-BOX TESTING. PUBLISH FOR AREA AND "GESTORIA"
-         * WEB SERVICE -> /ServicioAppsandroidCubos
-         */
-        beta {
-            initWith debug
-            debuggable true
-            applicationIdSuffix ".beta"
-            versionNameSuffix "-beta"
-            // This variable must *NOT* be changed without permissions
-            buildConfigField "String", "WS_SERVICE", "\"/ServicioAppsandroidCubos\""
-            buildConfigField "String", "URL_BASE", "\"http://pageandroid.dyndns.org/\""
-            buildConfigField "boolean", "IS_CUBOS", "true"
-        }
-
-        /**
-         * VARIANT TO DEVELOP STAGE AND WHITE-BOX TESTING. *DO NOT* PUBLISH
-         * WEB SERVICE -> "" as localhost
-         * WEB SERVICE -> /ServicioAppsandroidProserver
-         */
         debug {
             applicationIdSuffix ".debug"
             debuggable true
             versionNameSuffix "-alpha"
-            // Change for dev in prosever with:
-            buildConfigField "String", "WS_SERVICE", "\"\""
-            // buildConfigField "String", "WS_SERVICE", "\"/ServicioAppsandroidProserver\""
-            buildConfigField "String", "URL_BASE", "\"http://localhost:8080\""
-            buildConfigField "boolean", "IS_CUBOS", "true"
+            buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
+            buildConfigField "String", "API_KEY", "\"f1d25ec5c0f90889e99aff4ab6a492ad\""
+            buildConfigField "String", "BASE_URL_IMEGES", "\"https://image.tmdb.org/t/p/w500\""
         }
     }
     compileOptions {
@@ -92,9 +49,10 @@ android {
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -115,6 +73,9 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.14.2'
     kapt 'com.github.bumptech.glide:compiler:4.13.0'
 
+    // Picasso
+    implementation "com.squareup.picasso:picasso:2.71828"
+
     // GSON
     implementation 'com.google.code.gson:gson:2.8.9'
 
@@ -125,10 +86,17 @@ dependencies {
     //LifeCycle
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
-    implementation "androidx.fragment:fragment-ktx:1.5.3"
-    implementation "androidx.activity:activity-ktx:1.6.0"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
+    implementation "androidx.fragment:fragment-ktx:1.4.1"
+    implementation "androidx.activity:activity-ktx:1.4.0"
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
+
+//    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+//    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+//    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1:2.5.1'
+//    implementation "androidx.fragment:fragment:1.5.3:1.5.3"
+//    implementation "androidx.activity:activity:1.4.0"
+//    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1:2.5.1'
 
     //interceptor
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'

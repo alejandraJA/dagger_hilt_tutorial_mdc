@@ -22,8 +22,7 @@ object DatabaseModule {
         "movies"
     ).build()
 
-
+    @Singleton
     @Provides
     fun provideQuotesDao(db: AppDatabase): MovieDao = db.quoteDao()
-
 }

@@ -6,11 +6,12 @@ import com.example.dagger_hilt.data.datasource.database.entities.MovieEntity
 import androidx.lifecycle.LiveData
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun setMovie(movieEntity: MovieEntity?)
+    fun setMovie(movieEntity: MovieEntity)
 
     @Query("SELECT * FROM movie")
     fun getMovies(): LiveData<List<MovieEntity>>

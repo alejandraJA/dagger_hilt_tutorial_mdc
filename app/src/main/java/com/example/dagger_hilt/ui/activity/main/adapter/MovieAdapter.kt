@@ -11,11 +11,10 @@ class MovieAdapter(
     private val movieInterface: (Int, Boolean) -> Unit
 ) : RecyclerView.Adapter<MovieViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val inflate = layoutInflater.inflate(R.layout.item_movie, parent, false)
-        return MovieViewHolder(inflate, movieInterface)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MovieViewHolder(
+        LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false),
+        movieInterface
+    )
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         holder.bind(quoteList[position])

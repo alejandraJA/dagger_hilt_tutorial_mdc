@@ -28,6 +28,10 @@ class MainActivity : AppCompatActivity() {
             }
         binding.recyclerMovie.setHasFixedSize(true)
         binding.recyclerMovie.adapter = movieAdapter
+        /**
+         * En caso de que se trate de un Fragment,
+         * this será remplazado por viewLifecycleOwner
+         */
         viewModel.movies.observe(this) {
             movieList.clear()
             movieList.addAll(it!!)

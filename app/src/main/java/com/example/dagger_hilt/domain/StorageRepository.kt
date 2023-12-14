@@ -21,8 +21,7 @@ class StorageRepository @Inject constructor(private val storage: Storage) {
         val registeredUser = this.userName
         if (registeredUser != userName) return false
         val registeredPassword = storage.getString("$userName$PASSWORD")
-        if (registeredPassword != password) return false
-        return true
+        return registeredPassword == password
     }
 
     fun unregister() {

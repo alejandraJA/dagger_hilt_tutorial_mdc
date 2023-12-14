@@ -36,7 +36,7 @@ android {
                 proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
                 buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
                 buildConfigField "String", "API_KEY", "\"f1d25ec5c0f90889e99aff4ab6a492ad\""
-                buildConfigField "String", "BASE_URL_IMEGES", "\"https://image.tmdb.org/t/p/w500\""
+                buildConfigField "String", "BASE_URL_IMAGES", "\"https://image.tmdb.org/t/p/w500\""
             }
             debug {
                 applicationIdSuffix ".debug"
@@ -44,7 +44,7 @@ android {
                 versionNameSuffix "-alpha"
                 buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
                 buildConfigField "String", "API_KEY", "\"f1d25ec5c0f90889e99aff4ab6a492ad\""
-                buildConfigField "String", "BASE_URL_IMEGES", "\"https://image.tmdb.org/t/p/w500\""
+                buildConfigField "String", "BASE_URL_IMAGES", "\"https://image.tmdb.org/t/p/w500\""
             }
         }
         compileOptions {

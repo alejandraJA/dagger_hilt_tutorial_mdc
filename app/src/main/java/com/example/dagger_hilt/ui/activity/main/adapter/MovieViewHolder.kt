@@ -21,7 +21,7 @@ class MovieViewHolder(itemView: View, private val movieInterface: (Int, Boolean)
         }
         binding.checkboxLike.isChecked = movieEntity.like
         Picasso.get()
-            .load(Constants.BASE_URL_IMEGES + movieEntity.posterPath)
+            .load(Constants.BASE_URL_IMAGES + movieEntity.posterPath)
 //          .placeholder(R.drawable.ic_round_person_24)
 //          .error(R.drawable.ic_round_error_24)
             .noFade()

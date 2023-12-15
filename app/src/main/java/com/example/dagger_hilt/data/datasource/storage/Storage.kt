@@ -16,7 +16,7 @@ class Storage @Inject constructor(
     fun setString(key: String, value: String) {
         with(sharedPreferences.edit()) {
             putString(key, value)
-            apply()
+            commit()
         }
     }
 

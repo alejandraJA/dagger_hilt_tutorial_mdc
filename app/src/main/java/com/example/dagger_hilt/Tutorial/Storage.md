@@ -27,8 +27,8 @@ class Storage @Inject constructor(
 
 }
 ```
-- Consulte [Storage](../data/datasource/storage/Storage.kt) para visualizarlo mejor.
-- Consulte [StorageRepository](../domain/StorageRepository.kt) para ver su implementación.
+- Consulte [Storage](../data/datasource/storage/StorageKts.kt) para visualizarlo mejor.
+- Consulte [StorageRepository](../domain/StorageRepositoryKts.kt) para ver su implementación.
 
 ## Java
 ```java

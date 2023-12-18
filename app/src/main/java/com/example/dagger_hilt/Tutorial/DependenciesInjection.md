@@ -27,7 +27,7 @@ public class HiltApplication extends Application {
 }
 ```
 
-[Vea HiltApplication para más](../HiltApplication.kt).
+[Vea HiltApplication para más](../HiltApplicationKts.kt).
 
 Después, pasaremos a definir la clase como entrada de aplicación en el manifestó con la
 etiqueta `name`, dentro del `application`.

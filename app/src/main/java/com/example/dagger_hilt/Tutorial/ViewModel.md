@@ -31,7 +31,7 @@ class MainViewModel @Inject constructor(
 }
 ```
 
-Vea [MainViewModel](../ui/activity/main/viewModel/MainViewModel.kt) para visualizarlo mejor
+Vea [MainViewModel](../ui/activity/main/viewModel/MainViewModelKts.kt) para visualizarlo mejor
 
 ## Java
 

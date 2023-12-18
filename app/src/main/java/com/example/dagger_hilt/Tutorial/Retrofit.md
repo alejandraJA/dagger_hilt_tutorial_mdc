@@ -29,7 +29,7 @@ data class MovieModel(
 )
 ```
 
-Consulte [MovieModel](../data/datasource/web/models/MovieModel.kt) para visualizarlo mejor.
+Consulte [MovieModel](../data/datasource/web/models/MovieModelKts.kt) para visualizarlo mejor.
 
 ### Java
 
@@ -97,7 +97,7 @@ interface MovieService {
 }
 ```
 
-Consulte [MovieService](../data/datasource/web/api/MovieService.kt) para visualizarlo mejor.
+Consulte [MovieService](../data/datasource/web/api/MovieServiceKts.kt) para visualizarlo mejor.
 
 #### Helper
 
@@ -109,7 +109,7 @@ interface MovieHelper {
 }
 ```
 
-Consulte [MovieHelper](../data/datasource/web/api/MovieHelper.kt) para visualizarlo mejor.
+Consulte [MovieHelper](../data/datasource/web/api/MovieHelperKts.kt) para visualizarlo mejor.
 
 #### Helper Implement
 
@@ -124,9 +124,9 @@ class MovieHelperImp @Inject constructor(private val movieService: MovieService)
 }
 ```
 
-- Consulte [MovieHelperImp](../data/datasource/web/api/MovieHelperImp.kt) para visualizarlo mejor.
-- Consulte [Resolve](../data/datasource/web/util/Resolve.kt).
-- Consulte [WebStatus](../data/datasource/web/util/WebStatus.kt).
+- Consulte [MovieHelperImp](../data/datasource/web/api/MovieHelperKtsImp.kt) para visualizarlo mejor.
+- Consulte [Resolve](../data/datasource/web/util/ResolveKts.kt).
+- Consulte [WebStatus](../data/datasource/web/util/WebStatusKts.kt).
 
 ### Java
 

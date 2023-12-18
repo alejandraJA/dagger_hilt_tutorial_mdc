@@ -24,7 +24,7 @@ object DatabaseModule {
 }
 ```
 
-Consulte [DatabaseModule](../sys/di/DatabaseModule.kt).
+Consulte [DatabaseModule](../sys/di/DatabaseModuleKts.kt).
 
 ### Java
 

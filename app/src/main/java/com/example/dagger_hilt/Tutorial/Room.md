@@ -27,7 +27,7 @@ class MovieEntity(
 )
 ```
 
-Consulte [MovieEntity](../data/datasource/database/entities/MovieEntity.kt) para visualizarlo mejor.
+Consulte [MovieEntity](../data/datasource/database/entities/MovieEntityKts.kt) para visualizarlo mejor.
 
 ### Java
 
@@ -136,7 +136,7 @@ interface MovieDao {
 }
 ```
 
-Consulte [MovieDao](../data/datasource/database/dao/MovieDao.kt) para visualizarlo mejor.
+Consulte [MovieDao](../data/datasource/database/dao/MovieDaoKts.kt) para visualizarlo mejor.
 
 ### Java
 
@@ -182,7 +182,7 @@ abstract class AppDatabase : RoomDatabase() {
 }
 ```
 
-Consulte [AppDatabase](../data/db/AppDatabase.kt) para visualizarlo mejor.
+Consulte [AppDatabase](../data/db/AppDatabaseKts.kt) para visualizarlo mejor.
 
 ### Java
 

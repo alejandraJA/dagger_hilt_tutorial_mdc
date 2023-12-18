@@ -251,12 +251,11 @@ public class MovieEntity {
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-        <data>
+    <data>
 
-            <variable
-                name="movie"
-                type="com.example.dagger_hilt.data.datasource.database.entities.MovieEntity" />
-        </data>
+        <variable name="movie"
+            type="com.example.dagger_hilt.data.datasource.database.entities.MovieEntityKts" />
+    </data>
 </layout>
 ```
 

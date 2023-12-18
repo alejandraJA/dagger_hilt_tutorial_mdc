@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-Consulte [MainActivity](../ui/activity/main/MainActivity.kt) para visualizarlo mejor.
+Consulte [MainActivity](../ui/activity/main/MainActivityKts.kt) para visualizarlo mejor.
 
 ### Java
 

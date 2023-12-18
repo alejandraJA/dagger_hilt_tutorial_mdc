@@ -7,7 +7,7 @@
 
         <variable
             name="movie"
-            type="com.example.dagger_hilt.data.datasource.database.entities.MovieEntity" />
+            type="com.example.dagger_hilt.data.datasource.database.entities.MovieEntityKts" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

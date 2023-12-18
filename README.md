@@ -1,36 +1,35 @@
-# Implementación de Dagger Hilt en Android con Arquitectura ligera
+# Proyecto de Ejemplo: Aplicación Android con Clean Architecture
+[Ir al Tutorial](app/src/main/java/com/example/dagger_hilt/README.md)
 
-## Tecnologías Utilizadas
+Este proyecto de ejemplo se centra en la creación de una aplicación Android utilizando las mejores
+prácticas recomendadas por la arquitectura de Android. Implementa Clean Architecture para garantizar
+una separación clara de responsabilidades y promover la escalabilidad del código.
 
-- **[Dagger](https://dagger.dev/dev-guide/android.html)**
-- **[Gson](https://github.com/google/gson)**
-- **[Retrofit](https://square.github.io/retrofit/)**
-- **[Glide](https://github.com/bumptech/glide)**
-- **[Room](https://developer.android.com/jetpack/androidx/releases/room)**
-- **Android Lifecycle**
+## Tecnologías Utilizadas:
 
----
+- **Kotlin y Java:** Lenguajes de programación principales para el desarrollo de la aplicación.
+- **Dagger-Hilt:** Biblioteca utilizada para la inyección de dependencias.
+- **Retrofit:** Utilizado para realizar llamadas a APIs REST.
+- **Room:** Para la gestión de la persistencia de datos local.
+- **Lifecycle:** Gestión del ciclo de vida de los componentes de la aplicación.
+- **Glide:** Librería para la carga eficiente de imágenes.
 
-## Implementación
+## Objetivo del Proyecto:
 
-- Configuración de Gradle.
-    - [Build Config](app/src/main/java/com/example/dagger_hilt/Tutorial/BuildConfig.md).
-    - [Dependencias](app/src/main/java/com/example/dagger_hilt/Tutorial/Dependencies.md).
-- [Estructura de los paquetes](app/src/main/java/com/example/dagger_hilt/Tutorial/pakage.md).
-- [Vinculación de vistas viewBinding y dataBinding](app/src/main/java/com/example/dagger_hilt/Tutorial/Binding.md).
-- Capa de Datos.
-    - [Room](app/src/main/java/com/example/dagger_hilt/Tutorial/Room.md).
-    - [Retrofit](app/src/main/java/com/example/dagger_hilt/Tutorial/Retrofit.md).
-    - [Storage](app/src/main/java/com/example/dagger_hilt/Tutorial/Storage.md).
-- [Inicio de Implementación de inyección de dependencias con Dagger-Hilt](app/src/main/java/com/example/dagger_hilt/Tutorial/DependenciesInjection.md).
-  - [Modulos](app/src/main/java/com/example/dagger_hilt/Tutorial/Modulos.md) (Explicación).
-  - [Implementación](app/src/main/java/com/example/dagger_hilt/Tutorial/Implementacion.md).
-- Capa de Dominio (Repositorios y UseCase). 
-  - [Teoría](app/src/main/java/com/example/dagger_hilt/Tutorial/Repository.md)
-  - Ejemplos
-    - [DatabseRepository](app/src/main/java/com/example/dagger_hilt/domain/DatabaseRepository.kt)
-    - [ApiRepository](app/src/main/java/com/example/dagger_hilt/domain/ApiRepository.kt)
-    - [StorageRepository](app/src/main/java/com/example/dagger_hilt/domain/StorageRepository.kt)
-- Capa de Vistas
-  - [ViewModel](app/src/main/java/com/example/dagger_hilt/Tutorial/ViewModel.md)
-  - [Views](app/build/generated/res/resValues/debug/com/example/dagger_hilt/Tutorial/Views.md)
+Este proyecto se ha creado con la intención de proporcionar un ejemplo claro y didáctico para
+aquellos interesados en aprender a utilizar estas tecnologías en sus propios proyectos Android. La
+documentación y el código incluyen ejemplos prácticos y comentarios detallados para facilitar la
+comprensión del uso de estas herramientas en conjunto, siguiendo las recomendaciones de la
+arquitectura Android.
+
+## Uso del Proyecto:
+
+El código y la estructura del proyecto están organizados de manera que sea fácil de entender y
+seguir. Este material está diseñado para servir como recurso de aprendizaje para desarrolladores que
+deseen profundizar en el desarrollo de aplicaciones móviles para Android, utilizando herramientas
+modernas y siguiendo estándares de calidad.
+
+¡Explora, experimenta y aprende con este proyecto! Esperamos que encuentres esta documentación y el
+código adjunto útiles para tu desarrollo como programador de aplicaciones móviles en la plataforma
+Android.
+

@@ -16,10 +16,10 @@ import dagger.Provides
 object DatabaseModuleKts {
     @Singleton
     @Provides
-    fun providerDatabase(@ApplicationContext app: Context?) = Room.databaseBuilder(
+    fun providerDatabase(@ApplicationContext app: Context?): AppDatabaseKts = Room.databaseBuilder(
         app!!,
         AppDatabaseKts::class.java,
-        "movies"
+        "moviesKts"
     ).build()
 
     @Singleton

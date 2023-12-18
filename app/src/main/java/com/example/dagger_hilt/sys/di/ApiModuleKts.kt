@@ -12,6 +12,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -20,6 +21,7 @@ object ApiModuleKts {
 
     @Singleton
     @Provides
+    @Named("clientKts")
     fun provideOkHttpClient() = if (BuildConfig.DEBUG) {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
@@ -30,18 +32,19 @@ object ApiModuleKts {
 
     @Singleton
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        val build = Retrofit.Builder()
+    @Named("retrofitKts")
+    fun provideRetrofit(@Named("clientKts") okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .build()
-        return build
     }
 
     @Provides
     @Singleton
-    fun provideMovieService(retrofit: Retrofit): MovieServiceKts = retrofit.create(MovieServiceKts::class.java)
+    fun provideMovieService(@Named("retrofitKts") retrofit: Retrofit): MovieServiceKts =
+        retrofit.create(MovieServiceKts::class.java)
 
     @Provides
     @Singleton

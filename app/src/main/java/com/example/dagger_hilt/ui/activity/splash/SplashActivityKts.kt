@@ -18,14 +18,14 @@ class SplashActivityKts : AppCompatActivity() {
         val binding = ActivitySplashBinding.inflate(
             layoutInflater
         )
-        val viewModel = ViewModelProvider(this)[SplashViewModelKts::class.java]
+//        val viewModel = ViewModelProvider(this)[SplashViewModelKts::class.java]
         setContentView(binding.root)
-        viewModel.loadMovies().observe(this) { result: StatusResponse ->
-            if (result === StatusResponse.SUCCESS || result === StatusResponse.ERROR) {
-                val main = Intent(this, MainActivityKts::class.java)
-                startActivity(main)
-                finish()
-            }
-        }
+        val main = Intent(this, MainActivityKts::class.java)
+        startActivity(main)
+        finish()
+//        viewModel.loadMovies().observe(this) { result: StatusResponse ->
+//            if (result === StatusResponse.SUCCESS || result === StatusResponse.ERROR) {
+//            }
+//        }
     }
 }

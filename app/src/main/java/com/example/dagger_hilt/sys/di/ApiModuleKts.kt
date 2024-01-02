@@ -4,6 +4,7 @@ import com.example.dagger_hilt.BuildConfig
 import com.example.dagger_hilt.data.datasource.web.api.MovieHelperKts
 import com.example.dagger_hilt.data.datasource.web.api.MovieHelperKtsImp
 import com.example.dagger_hilt.data.datasource.web.api.MovieServiceKts
+import com.example.dagger_hilt.sys.util.AppExecutors
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,6 +13,8 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -49,4 +52,8 @@ object ApiModuleKts {
     @Provides
     @Singleton
     fun provideMovieHelper(movieHelperImp: MovieHelperKtsImp): MovieHelperKts = movieHelperImp
+
+    @Provides
+    @Singleton
+    fun provideAppExecutor(): AppExecutors = AppExecutors()
 }

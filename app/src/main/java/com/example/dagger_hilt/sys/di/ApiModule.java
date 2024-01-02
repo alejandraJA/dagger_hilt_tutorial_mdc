@@ -51,4 +51,5 @@ public abstract class ApiModule {
     public static MovieService provideMovieService(@Named("retrofitJvm") @NonNull Retrofit retrofit) {
         return retrofit.create(MovieService.class);
     }
+
 }

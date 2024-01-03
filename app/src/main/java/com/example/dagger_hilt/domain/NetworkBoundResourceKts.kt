@@ -9,15 +9,8 @@ import com.example.dagger_hilt.data.datasource.web.models.response.ApiErrorRespo
 import com.example.dagger_hilt.data.datasource.web.models.response.ApiResponseKts
 import com.example.dagger_hilt.data.datasource.web.models.response.ApiSuccessResponseKts
 import com.example.dagger_hilt.sys.util.AppExecutorsKts
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import com.example.dagger_hilt.sys.util.ResourceKts as Resource
 
-// ResultType: Type for the Resource data.
-// RequestType: Type for the API response.
-@OptIn(DelicateCoroutinesApi::class)
 abstract class NetworkBoundResourceKts<ResultType, RequestType> @MainThread constructor(
     private val appExecutorsKts: AppExecutorsKts
 ) {
@@ -31,9 +24,7 @@ abstract class NetworkBoundResourceKts<ResultType, RequestType> @MainThread cons
         result.addSource(dbSource) { data ->
             result.removeSource(dbSource)
             if (shouldFetch(data))
-                GlobalScope.launch(Dispatchers.Main) {
-                    fetchFromNetwork(dbSource)
-                }
+                fetchFromNetwork(dbSource)
             else result.addSource(dbSource) { newData ->
                 setValue(Resource.success(newData))
             }
@@ -48,7 +39,7 @@ abstract class NetworkBoundResourceKts<ResultType, RequestType> @MainThread cons
         }
     }
 
-    private suspend fun fetchFromNetwork(dbSource: LiveData<ResultType>) {
+    private fun fetchFromNetwork(dbSource: LiveData<ResultType>) {
         val apiResponseKts: LiveData<ApiResponseKts<RequestType>> = createCall()
         result.addSource(dbSource) { newData ->
             setValue(Resource.loading(newData))
@@ -105,5 +96,5 @@ abstract class NetworkBoundResourceKts<ResultType, RequestType> @MainThread cons
     protected abstract fun loadFromDb(): LiveData<ResultType>
 
     @MainThread
-    protected abstract suspend fun createCall(): LiveData<ApiResponseKts<RequestType>>
+    protected abstract fun createCall(): LiveData<ApiResponseKts<RequestType>>
 }

@@ -61,7 +61,7 @@ public class MovieRepository {
 
             @Override
             protected LiveData<ApiResponse> createCall() {
-                return ApiResponse.create(service.loadMovies(Constants.API_KEY));
+                return service.loadMovies(Constants.API_KEY);
             }
         }.asLiveData();
     }

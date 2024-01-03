@@ -1,12 +1,14 @@
 package com.example.dagger_hilt.data.datasource.web.api;
 
-import com.example.dagger_hilt.data.datasource.web.models.MoviesResponse;
+import androidx.lifecycle.LiveData;
 
-import retrofit2.Call;
+import com.example.dagger_hilt.data.datasource.web.models.response.ApiResponse;
+
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface MovieService {
     @GET("discover/movie")
-    Call<MoviesResponse> loadMovies(@Query("api_key") String apiKey);
+    LiveData<ApiResponse> loadMovies(@Query("api_key") String apiKey);
+
 }

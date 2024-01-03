@@ -1,12 +1,11 @@
 package com.example.dagger_hilt.domain
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.dagger_hilt.data.datasource.database.dao.MovieDaoKts
 import com.example.dagger_hilt.data.datasource.database.entities.MovieEntityKts
 import com.example.dagger_hilt.data.datasource.web.api.MovieServiceKts
-import com.example.dagger_hilt.data.datasource.web.models.response.ApiResponseKts
 import com.example.dagger_hilt.data.datasource.web.models.MoviesResponseKts
+import com.example.dagger_hilt.data.datasource.web.models.response.ApiResponseKts
 import com.example.dagger_hilt.sys.util.AppExecutorsKts
 import com.example.dagger_hilt.sys.util.ConstantsKts
 import com.example.dagger_hilt.sys.util.ResourceKts
@@ -39,7 +38,7 @@ class MovieRepositoryKts @Inject constructor(
 
             override fun loadFromDb(): LiveData<List<MovieEntityKts>> = dao.getMovies()
 
-            override suspend fun createCall(): LiveData<ApiResponseKts<MoviesResponseKts>> =
+            override fun createCall(): LiveData<ApiResponseKts<MoviesResponseKts>> =
                 service.loadMovies(ConstantsKts.API_KEY)
         }.asLiveData()
 

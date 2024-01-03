@@ -23,7 +23,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
         result.addSource(dbSource, (data) -> {
             result.removeSource(dbSource);
             if (shouldFetch(data)) {
-                appExecutors.getMainThread().execute(() -> fetchFromNetwork(dbSource));
+                fetchFromNetwork(dbSource);
             } else {
                 result.addSource(dbSource, (newData) -> setValue(Resource.success(newData)));
             }
@@ -54,7 +54,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
                 onFetchFailed();
                 result.addSource(dbSource, (newData ->
                         setValue(Resource.error(((ApiErrorResponse) response)
-                                        .getErrorMessage(), newData))));
+                                .getErrorMessage(), newData))));
             }
         });
     }

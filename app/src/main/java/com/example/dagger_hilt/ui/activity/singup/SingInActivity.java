@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.dagger_hilt.databinding.ActivitySingInBinding;
 import com.example.dagger_hilt.sys.util.UtilsText;
 import com.example.dagger_hilt.ui.activity.main.MainActivity;
+import com.example.dagger_hilt.ui.activity.singup.viewModel.SingInViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
 

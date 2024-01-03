@@ -6,8 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.dagger_hilt.databinding.ActivityLoginBinding
 import com.example.dagger_hilt.sys.util.UtilsTextKts.isNotBlank
+import com.example.dagger_hilt.ui.activity.main.MainActivityKts
 import com.example.dagger_hilt.ui.activity.singup.SingInActivityKts
-import com.example.dagger_hilt.ui.activity.splash.SplashActivityKts
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,7 +32,7 @@ class LoginActivityKts : AppCompatActivity() {
                         password = binding.inputPassword.text.toString().trim()
                     )
                 ) {
-                    startActivity(Intent(this, SplashActivityKts::class.java))
+                    startActivity(Intent(this, MainActivityKts::class.java))
                     finish()
                 }
         }

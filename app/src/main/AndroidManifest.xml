@@ -19,9 +19,6 @@
             android:name=".ui.activity.singup.SingInActivityKts"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.splash.SplashActivityKts"
-            android:exported="false" />
-        <activity
             android:name=".ui.activity.main.MainActivityKts"
             android:exported="false" />
         <activity

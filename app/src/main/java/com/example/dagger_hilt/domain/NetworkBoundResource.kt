@@ -1,4 +1,4 @@
-package com.example.dagger_hilt.sys.util
+package com.example.dagger_hilt.domain
 
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
@@ -8,6 +8,7 @@ import com.example.dagger_hilt.data.datasource.web.models.ApiEmptyResponse
 import com.example.dagger_hilt.data.datasource.web.models.ApiErrorResponse
 import com.example.dagger_hilt.data.datasource.web.models.ApiResponse
 import com.example.dagger_hilt.data.datasource.web.models.ApiSuccessResponse
+import com.example.dagger_hilt.sys.util.AppExecutors
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

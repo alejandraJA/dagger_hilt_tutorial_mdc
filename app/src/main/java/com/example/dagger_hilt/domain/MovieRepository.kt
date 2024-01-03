@@ -9,16 +9,14 @@ import com.example.dagger_hilt.data.datasource.web.models.ApiResponse
 import com.example.dagger_hilt.data.datasource.web.models.MoviesResponseKts
 import com.example.dagger_hilt.sys.util.AppExecutors
 import com.example.dagger_hilt.sys.util.ConstantsKts
-import com.example.dagger_hilt.sys.util.NetworkBoundResource
 import com.example.dagger_hilt.sys.util.ResourceKts
-import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class MovieRepository @Inject constructor(
     private val dao: MovieDaoKts,
-    private val serviceKts: MovieServiceKts,
+    private val service: MovieServiceKts,
     private val appExecutor: AppExecutors
 ) {
     fun loadMovies(): LiveData<ResourceKts<List<MovieEntityKts>>> =
@@ -42,7 +40,9 @@ class MovieRepository @Inject constructor(
             override fun loadFromDb(): LiveData<List<MovieEntityKts>> = dao.getMovies()
 
             override suspend fun createCall(): LiveData<ApiResponse<MoviesResponseKts>> =
-                MutableLiveData(ApiResponse.create(serviceKts.loadMovies(ConstantsKts.API_KEY)))
+                MutableLiveData(ApiResponse.create(service.loadMovies(ConstantsKts.API_KEY)))
         }.asLiveData()
+
+    fun updateMovie(id: Int, check: Boolean) = dao.updateMovie(id, check)
 
 }

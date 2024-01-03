@@ -40,7 +40,7 @@ class MovieRepositoryKts @Inject constructor(
             override fun loadFromDb(): LiveData<List<MovieEntityKts>> = dao.getMovies()
 
             override suspend fun createCall(): LiveData<ApiResponseKts<MoviesResponseKts>> =
-                MutableLiveData(ApiResponseKts.create(service.loadMovies(ConstantsKts.API_KEY)))
+                service.loadMovies(ConstantsKts.API_KEY)
         }.asLiveData()
 
     fun updateMovie(id: Int, check: Boolean) = dao.updateMovie(id, check)

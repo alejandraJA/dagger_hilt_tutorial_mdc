@@ -3,6 +3,7 @@ package com.example.dagger_hilt.sys.di
 import com.example.dagger_hilt.BuildConfig
 import com.example.dagger_hilt.data.datasource.web.api.MovieServiceKts
 import com.example.dagger_hilt.sys.util.AppExecutorsKts
+import com.example.dagger_hilt.sys.util.LiveDataCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,8 +35,9 @@ object ApiModuleKts {
     @Named("retrofitKts")
     fun provideRetrofit(@Named("clientKts") okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BuildConfig.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .client(okHttpClient)
             .build()
     }

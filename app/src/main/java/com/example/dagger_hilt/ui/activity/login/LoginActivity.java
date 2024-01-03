@@ -9,8 +9,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.dagger_hilt.databinding.ActivityLoginBinding;
 import com.example.dagger_hilt.sys.util.UtilsText;
+import com.example.dagger_hilt.ui.activity.login.viewModel.LoginViewModel;
+import com.example.dagger_hilt.ui.activity.main.MainActivity;
 import com.example.dagger_hilt.ui.activity.singup.SingInActivity;
-import com.example.dagger_hilt.ui.activity.splash.SplashActivity;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -42,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
                         binding.inputPassword.getText().toString().trim()
                 )
                 ) {
-                    startActivity(new Intent(this, SplashActivity.class));
+                    startActivity(new Intent(this, MainActivity.class));
                     finish();
                 }
         });

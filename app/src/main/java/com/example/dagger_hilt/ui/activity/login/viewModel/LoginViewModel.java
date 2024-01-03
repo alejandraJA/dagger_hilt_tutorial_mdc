@@ -1,4 +1,4 @@
-package com.example.dagger_hilt.ui.activity.login;
+package com.example.dagger_hilt.ui.activity.login.viewModel;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;

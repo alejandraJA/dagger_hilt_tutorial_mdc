@@ -1,4 +1,4 @@
-package com.example.dagger_hilt.ui.activity.singup
+package com.example.dagger_hilt.ui.activity.singup.viewModel
 
 import androidx.lifecycle.ViewModel
 import com.example.dagger_hilt.domain.StorageRepositoryKts

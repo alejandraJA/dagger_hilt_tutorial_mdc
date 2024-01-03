@@ -3,7 +3,7 @@ package com.example.dagger_hilt.sys.util;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class UtilsText {
-    private TextInputLayout editText;
+    private final TextInputLayout editText;
 
     public UtilsText(TextInputLayout editText) {
         this.editText = editText;

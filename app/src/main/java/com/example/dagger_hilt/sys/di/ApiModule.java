@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 
 import com.example.dagger_hilt.BuildConfig;
 import com.example.dagger_hilt.data.datasource.web.api.MovieService;
+import com.example.dagger_hilt.sys.util.AppExecutors;
+import com.example.dagger_hilt.sys.util.LiveDataCallAdapterFactory;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -40,8 +42,9 @@ public abstract class ApiModule {
     @Named("retrofitJvm")
     public static Retrofit provideRetrofit(@Named("clientJvm") OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(BuildConfig.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(new LiveDataCallAdapterFactory())
                 .client(okHttpClient)
                 .build();
     }
@@ -51,4 +54,11 @@ public abstract class ApiModule {
     public static MovieService provideMovieService(@Named("retrofitJvm") @NonNull Retrofit retrofit) {
         return retrofit.create(MovieService.class);
     }
+
+    @Provides
+    @Singleton
+    public static AppExecutors provideAppExecutor(){
+        return new AppExecutors();
+    }
+
 }

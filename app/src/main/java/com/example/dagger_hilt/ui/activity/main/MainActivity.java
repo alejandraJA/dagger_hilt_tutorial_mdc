@@ -2,6 +2,7 @@ package com.example.dagger_hilt.ui.activity.main;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.dagger_hilt.data.datasource.database.entities.MovieEntity;
 import com.example.dagger_hilt.databinding.ActivityMainBinding;
+import com.example.dagger_hilt.sys.util.Constants;
 import com.example.dagger_hilt.ui.activity.main.adapter.MovieAdapter;
 import com.example.dagger_hilt.ui.activity.main.viewModel.MainViewModel;
 
@@ -35,10 +37,32 @@ public class MainActivity extends AppCompatActivity {
           En caso de que se trate de un Fragment,
           this será remplazado por viewLifecycleOwner
          */
-        viewModel.getMovies().observe(this, movies -> {
-            movieList.clear();
-            movieList.addAll(movies);
-            movieAdapter.notifyDataSetChanged();
+        viewModel.getMoviesList().observe(this, resource -> {
+
+            if (resource.status() == Constants.StatusResponse.LOADING) Toast.makeText(
+                    this,
+                    "Loading ...",
+                    Toast.LENGTH_LONG
+            ).show();
+            if (resource.status() == Constants.StatusResponse.ERROR) Toast.makeText(
+                    this,
+                    "Error",
+                    Toast.LENGTH_LONG
+            ).show();
+
+            if (resource.status() == Constants.StatusResponse.SUCCESS) {
+                Toast.makeText(
+                        this,
+                        "Success",
+                        Toast.LENGTH_LONG
+                ).show();
+                var movies = resource.data();
+                movieList.clear();
+                if (movies != null) {
+                    movieList.addAll(movies);
+                    movieAdapter.notifyDataSetChanged();
+                }
+            }
         });
     }
 }

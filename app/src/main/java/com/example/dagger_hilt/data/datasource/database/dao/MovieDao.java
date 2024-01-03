@@ -26,4 +26,7 @@ public interface MovieDao {
 
     @Query("SELECT COUNT(*) FROM movie")
     int countMovies();
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void setMovies(List<MovieEntity> moviesList);
 }

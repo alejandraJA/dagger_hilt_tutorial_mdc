@@ -6,7 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.dagger_hilt.databinding.ActivitySingInBinding
 import com.example.dagger_hilt.sys.util.UtilsTextKts.isNotBlank
-import com.example.dagger_hilt.ui.activity.splash.SplashActivityKts
+import com.example.dagger_hilt.ui.activity.main.MainActivityKts
+import com.example.dagger_hilt.ui.activity.singup.viewModel.SingInViewModelKts
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,7 +24,7 @@ class SingInActivityKts : AppCompatActivity() {
                     userName = binding.inputEmail.text.toString().trim(),
                     password = binding.inputPassword.text.toString().trim()
                 )
-                startActivity(Intent(this, SplashActivityKts::class.java))
+                startActivity(Intent(this, MainActivityKts::class.java))
             }
         }
     }

@@ -18,10 +18,5 @@ data class ResourceKts<out T>(
         fun <T> error(msg: String): ResourceKts<T> =
             ResourceKts(ConstantsKts.StatusResponse.ERROR, null, msg)
 
-        fun <T> loading(): ResourceKts<T> =
-            ResourceKts(ConstantsKts.StatusResponse.LOADING, null, null)
-
-        fun <T> blank(): ResourceKts<T> =
-            ResourceKts(ConstantsKts.StatusResponse.BLANK, null, null)
     }
 }

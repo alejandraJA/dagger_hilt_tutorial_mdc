@@ -1,7 +1,5 @@
 package com.example.dagger_hilt.data.datasource.web.api
 
-import androidx.lifecycle.LiveData
-import com.example.dagger_hilt.data.datasource.web.models.ApiResponse
 import com.example.dagger_hilt.data.datasource.web.models.MoviesResponseKts
 import retrofit2.Response
 import retrofit2.http.GET

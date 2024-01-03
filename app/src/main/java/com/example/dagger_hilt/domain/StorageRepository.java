@@ -9,12 +9,12 @@ import javax.inject.Inject;
 
 public class StorageRepository {
 
-    @Inject
-    Storage storage;
+    private final Storage storage;
     private String userName;
 
     @Inject
-    public StorageRepository() {
+    public StorageRepository(Storage storage) {
+        this.storage = storage;
     }
 
     public boolean isUserRegistered() {

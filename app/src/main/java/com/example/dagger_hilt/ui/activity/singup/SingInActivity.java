@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.dagger_hilt.databinding.ActivitySingInBinding;
 import com.example.dagger_hilt.sys.util.UtilsText;
-import com.example.dagger_hilt.ui.activity.splash.SplashActivity;
+import com.example.dagger_hilt.ui.activity.main.MainActivity;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -30,7 +30,7 @@ public class SingInActivity extends AppCompatActivity {
                         binding.inputEmail.getText().toString().trim(),
                         binding.inputPassword.getText().toString().trim()
                 );
-                startActivity(new Intent(this, SplashActivity.class));
+                startActivity(new Intent(this, MainActivity.class));
             }
         });
     }

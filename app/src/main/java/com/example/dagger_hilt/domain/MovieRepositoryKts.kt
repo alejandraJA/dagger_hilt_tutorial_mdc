@@ -5,22 +5,22 @@ import androidx.lifecycle.MutableLiveData
 import com.example.dagger_hilt.data.datasource.database.dao.MovieDaoKts
 import com.example.dagger_hilt.data.datasource.database.entities.MovieEntityKts
 import com.example.dagger_hilt.data.datasource.web.api.MovieServiceKts
-import com.example.dagger_hilt.data.datasource.web.models.ApiResponse
+import com.example.dagger_hilt.data.datasource.web.models.response.ApiResponseKts
 import com.example.dagger_hilt.data.datasource.web.models.MoviesResponseKts
-import com.example.dagger_hilt.sys.util.AppExecutors
+import com.example.dagger_hilt.sys.util.AppExecutorsKts
 import com.example.dagger_hilt.sys.util.ConstantsKts
 import com.example.dagger_hilt.sys.util.ResourceKts
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MovieRepository @Inject constructor(
+class MovieRepositoryKts @Inject constructor(
     private val dao: MovieDaoKts,
     private val service: MovieServiceKts,
-    private val appExecutor: AppExecutors
+    private val appExecutor: AppExecutorsKts
 ) {
     fun loadMovies(): LiveData<ResourceKts<List<MovieEntityKts>>> =
-        object : NetworkBoundResource<List<MovieEntityKts>, MoviesResponseKts>(appExecutor) {
+        object : NetworkBoundResourceKts<List<MovieEntityKts>, MoviesResponseKts>(appExecutor) {
             override fun saveCallResult(response: MoviesResponseKts) =
                 response.listMovies.forEach { movie ->
                     dao.setMovie(
@@ -39,8 +39,8 @@ class MovieRepository @Inject constructor(
 
             override fun loadFromDb(): LiveData<List<MovieEntityKts>> = dao.getMovies()
 
-            override suspend fun createCall(): LiveData<ApiResponse<MoviesResponseKts>> =
-                MutableLiveData(ApiResponse.create(service.loadMovies(ConstantsKts.API_KEY)))
+            override suspend fun createCall(): LiveData<ApiResponseKts<MoviesResponseKts>> =
+                MutableLiveData(ApiResponseKts.create(service.loadMovies(ConstantsKts.API_KEY)))
         }.asLiveData()
 
     fun updateMovie(id: Int, check: Boolean) = dao.updateMovie(id, check)

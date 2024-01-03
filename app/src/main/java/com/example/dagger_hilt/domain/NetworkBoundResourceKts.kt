@@ -4,11 +4,11 @@ import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import com.example.dagger_hilt.data.datasource.web.models.ApiEmptyResponse
-import com.example.dagger_hilt.data.datasource.web.models.ApiErrorResponse
-import com.example.dagger_hilt.data.datasource.web.models.ApiResponse
-import com.example.dagger_hilt.data.datasource.web.models.ApiSuccessResponse
-import com.example.dagger_hilt.sys.util.AppExecutors
+import com.example.dagger_hilt.data.datasource.web.models.response.ApiEmptyResponseKts
+import com.example.dagger_hilt.data.datasource.web.models.response.ApiErrorResponseKts
+import com.example.dagger_hilt.data.datasource.web.models.response.ApiResponseKts
+import com.example.dagger_hilt.data.datasource.web.models.response.ApiSuccessResponseKts
+import com.example.dagger_hilt.sys.util.AppExecutorsKts
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -18,8 +18,8 @@ import com.example.dagger_hilt.sys.util.ResourceKts as Resource
 // ResultType: Type for the Resource data.
 // RequestType: Type for the API response.
 @OptIn(DelicateCoroutinesApi::class)
-abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constructor(
-    private val appExecutors: AppExecutors
+abstract class NetworkBoundResourceKts<ResultType, RequestType> @MainThread constructor(
+    private val appExecutorsKts: AppExecutorsKts
 ) {
 
     private val result = MediatorLiveData<Resource<ResultType>>()
@@ -30,9 +30,10 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
         val dbSource = loadFromDb()
         result.addSource(dbSource) { data ->
             result.removeSource(dbSource)
-            if (shouldFetch(data)) GlobalScope.launch(Dispatchers.Main) {
-                fetchFromNetwork(dbSource)
-            }
+            if (shouldFetch(data))
+                GlobalScope.launch(Dispatchers.Main) {
+                    fetchFromNetwork(dbSource)
+                }
             else result.addSource(dbSource) { newData ->
                 setValue(Resource.success(newData))
             }
@@ -48,18 +49,18 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
     }
 
     private suspend fun fetchFromNetwork(dbSource: LiveData<ResultType>) {
-        val apiResponse: LiveData<ApiResponse<RequestType>> = createCall()
+        val apiResponseKts: LiveData<ApiResponseKts<RequestType>> = createCall()
         result.addSource(dbSource) { newData ->
             setValue(Resource.loading(newData))
         }
-        result.addSource(apiResponse) { response ->
-            result.removeSource(apiResponse)
+        result.addSource(apiResponseKts) { response ->
+            result.removeSource(apiResponseKts)
             result.removeSource(dbSource)
             when (response) {
-                is ApiSuccessResponse -> {
-                    appExecutors.diskIO().execute {
+                is ApiSuccessResponseKts -> {
+                    appExecutorsKts.diskIO().execute {
                         saveCallResult(processResponse(response))
-                        appExecutors.mainThread().execute {
+                        appExecutorsKts.mainThread().execute {
                             result.addSource(loadFromDb()) { newData ->
                                 setValue(Resource.success(newData))
                             }
@@ -67,8 +68,8 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
                     }
                 }
 
-                is ApiEmptyResponse -> {
-                    appExecutors.mainThread().execute {
+                is ApiEmptyResponseKts -> {
+                    appExecutorsKts.mainThread().execute {
                         // reload from disk whatever we had
                         result.addSource(loadFromDb()) { newData ->
                             setValue(Resource.success(newData))
@@ -76,7 +77,7 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
                     }
                 }
 
-                is ApiErrorResponse -> {
+                is ApiErrorResponseKts -> {
                     onFetchFailed()
                     result.addSource(dbSource) { newData ->
                         setValue(Resource.error(response.errorMessage, newData))
@@ -91,7 +92,8 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
     fun asLiveData() = result as LiveData<Resource<ResultType>>
 
     @WorkerThread
-    protected open fun processResponse(response: ApiSuccessResponse<RequestType>) = response.body
+    protected open fun processResponse(response: ApiSuccessResponseKts<RequestType>): RequestType =
+        response.body
 
     @WorkerThread
     protected abstract fun saveCallResult(response: RequestType)
@@ -103,5 +105,5 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
     protected abstract fun loadFromDb(): LiveData<ResultType>
 
     @MainThread
-    protected abstract suspend fun createCall(): LiveData<ApiResponse<RequestType>>
+    protected abstract suspend fun createCall(): LiveData<ApiResponseKts<RequestType>>
 }

@@ -46,6 +46,11 @@ class MainActivityKts : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
             if (resource.status == ConstantsKts.StatusResponse.SUCCESS) {
+                Toast.makeText(
+                    this,
+                    "Success",
+                    Toast.LENGTH_LONG
+                ).show()
                 val it = resource.data
                 movieList.clear()
                 movieList.addAll(it!!)

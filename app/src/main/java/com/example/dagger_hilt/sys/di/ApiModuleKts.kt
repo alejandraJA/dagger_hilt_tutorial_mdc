@@ -2,7 +2,7 @@ package com.example.dagger_hilt.sys.di
 
 import com.example.dagger_hilt.BuildConfig
 import com.example.dagger_hilt.data.datasource.web.api.MovieServiceKts
-import com.example.dagger_hilt.sys.util.AppExecutors
+import com.example.dagger_hilt.sys.util.AppExecutorsKts
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -47,5 +47,5 @@ object ApiModuleKts {
 
     @Provides
     @Singleton
-    fun provideAppExecutor(): AppExecutors = AppExecutors()
+    fun provideAppExecutor(): AppExecutorsKts = AppExecutorsKts()
 }

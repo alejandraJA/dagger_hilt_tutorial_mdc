@@ -1,10 +1,11 @@
 package com.example.dagger_hilt.ui.activity.main.viewModel;
 
-import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.dagger_hilt.data.datasource.database.entities.MovieEntity;
-import com.example.dagger_hilt.domain.DatabaseRepository;
+import com.example.dagger_hilt.domain.MovieRepository;
+import com.example.dagger_hilt.sys.util.Resource;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -15,22 +16,21 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
 public class MainViewModel extends ViewModel {
+    private final MovieRepository repository;
+    private final LiveData<Resource<List<MovieEntity>>> moviesList;
 
     @Inject
-    DatabaseRepository databaseRepository;
-
-    @Inject
-    public MainViewModel() {
+    public MainViewModel(MovieRepository repository) {
+        this.repository = repository;
+        moviesList = repository.loadMovies();
     }
 
     public void updateMovie(int id, boolean check) {
         var executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> databaseRepository.updateMovie(id, check));
+        executor.execute(() -> repository.updateMovie(id, check));
     }
 
-    public MediatorLiveData<List<MovieEntity>> getMovies() {
-        var movies = new MediatorLiveData<List<MovieEntity>>();
-        movies.addSource(databaseRepository.getMovies(), movies::postValue);
-        return movies;
+    public LiveData<Resource<List<MovieEntity>>> getMoviesList() {
+        return moviesList;
     }
 }

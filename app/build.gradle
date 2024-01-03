@@ -113,6 +113,9 @@ android {
         implementation 'com.squareup.okhttp3:okhttp-urlconnection:4.3.0' // Java Net Cookie Jar
     }
     namespace 'com.example.dagger_hilt'
+    buildFeatures {
+        buildConfig true
+    }
 }
 
 dependencies {

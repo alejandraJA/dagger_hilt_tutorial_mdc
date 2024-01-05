@@ -14,7 +14,7 @@ import android.app.Application
 @HiltAndroidApp
 class HiltApplication : Application()
 ```
-
+Vea [HiltApplicationKts](../HiltApplicationKts.kt) para más.
 ## Java
 
 ```java
@@ -27,10 +27,11 @@ public class HiltApplication extends Application {
 }
 ```
 
-[Vea HiltApplication para más](../HiltApplicationKts.kt).
+Vea [HiltApplication](../HiltApplication.java) para más.
 
 Después, pasaremos a definir la clase como entrada de aplicación en el manifestó con la
 etiqueta `name`, dentro del `application`.
+
 
 ```xml
 <application

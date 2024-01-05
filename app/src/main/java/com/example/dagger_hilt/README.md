@@ -48,15 +48,17 @@ Android.
     - [Room](Tutorial/Room.md).
     - [Retrofit](Tutorial/Retrofit.md).
     - [Storage](Tutorial/Storage.md).
-- [Inicio de Implementación de inyección de dependencias con Dagger-Hilt](Tutorial/DependenciesInjection.md).
-    - [Modulos](Tutorial/Modulos.md) (Explicación).
-    - [Implementación](Tutorial/Implementacion.md).
+- [Inyección de dependencias](Tutorial/DependenciesExplication.md)
+  - [Inicio de Implementación de inyección de dependencias con Dagger-Hilt](Tutorial/DependenciesInjection.md).
+  - [Modulos](Tutorial/Modulos.md) (Explicación).
+  - [Implementación](Tutorial/Implementacion.md).
 - Capa de Dominio (Repositorios y UseCase).
-    - [Teoría](Tutorial/Repository.md)
+    - [Capa de Dominio](Tutorial/Repository.md)
     - Ejemplos
         - [DatabaseRepository](domain/DatabaseRepositoryKts.kt)
         - [ApiRepository](domain/ApiRepositoryKts.kt)
         - [StorageRepository](domain/StorageRepositoryKts.kt)
+- [Clean Architecture](Tutorial/CleanArchitecture.md)
 - Capa de Vistas
     - [ViewModel](Tutorial/ViewModel.md)
     - [Views](Tutorial/Views.md)

@@ -27,7 +27,8 @@ class MovieEntity(
 )
 ```
 
-Consulte [MovieEntity](../data/datasource/database/entities/MovieEntityKts.kt) para visualizarlo mejor.
+Consulte [MovieEntityKts](../data/datasource/database/entities/MovieEntityKts.kt) para visualizarlo
+mejor.
 
 ### Java
 
@@ -99,6 +100,8 @@ public class MovieEntity {
 }
 ```
 
+Consulte [MovieEntity](../data/datasource/database/entities/MovieEntity.java) para visualizarlo mejor.
+
 `@ColumnInfo(name="")` sirve para especificar el nombre que llevara la columna en la base de datos,
 aunque (de igual
 modo), si no es colocada dicha etiqueta, se configurará con el nombre de la variable.
@@ -136,7 +139,7 @@ interface MovieDao {
 }
 ```
 
-Consulte [MovieDao](../data/datasource/database/dao/MovieDaoKts.kt) para visualizarlo mejor.
+Consulte [MovieDaoKts](../data/datasource/database/dao/MovieDaoKts.kt) para visualizarlo mejor.
 
 ### Java
 
@@ -160,6 +163,7 @@ public interface MovieDao {
     int countMovies();
 }
 ```
+Consulte [MovieDao](../data/datasource/database/dao/MovieDao.java) para visualizarlo mejor.
 
 Room se encargará crear las implementaciones de cada una de las dao declaradas en está ruta.
 
@@ -182,7 +186,7 @@ abstract class AppDatabase : RoomDatabase() {
 }
 ```
 
-Consulte [AppDatabase](../data/db/AppDatabaseKts.kt) para visualizarlo mejor.
+Consulte [AppDatabaseKts](../data/db/AppDatabaseKts.kt) para visualizarlo mejor.
 
 ### Java
 
@@ -193,3 +197,5 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract MovieDao quoteDao();
 }
 ```
+
+Consulte [AppDatabase](../data/db/AppDatabase.java) para visualizarlo mejor.

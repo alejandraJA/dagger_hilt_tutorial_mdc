@@ -2,13 +2,14 @@
 
 ## Modelos
 
-Cada uno de los modelados usados por el API (tanto para peticiones y respuestas) deberán guardarse
-en el directorio: (Paquete)>data>datasourse>web>[models](../data/datasource/web). Y los miembros de
-estos objetos llevarán la anotación: `@SerializedName("name")`, dicha etiqueta contendrá el nombre
-que tenga el dato en el Json. De igual modo que con la entidad, si no es colocado se toma el nombre
-con el que fue nombrada la propiedad del objeto.
+En la arquitectura de una API, los modelos son representaciones estructuradas de los datos
+utilizados tanto para enviar solicitudes como para recibir respuestas. En el contexto de Retrofit,
+estos modelos se definen en un directorio específico de la aplicación.
 
 ### Kotlin
+
+En Kotlin, la definición de modelos se simplifica mediante el uso de clases de datos. Aquí está un
+ejemplo de cómo se puede definir un modelo de película:
 
 ```kotlin
 data class MovieModel(
@@ -29,9 +30,13 @@ data class MovieModel(
 )
 ```
 
-Consulte [MovieModel](../data/datasource/web/models/MovieModelKts.kt) para visualizarlo mejor.
+Puedes encontrar una representación más detallada de este modelo
+en [MovieModelKts](../data/datasource/web/models/MovieModelKts.kt).
 
 ### Java
+
+En Java, la definición de modelos implica la creación de clases con miembros correspondientes a los
+datos que se esperan de la API. Aquí está un ejemplo de un modelo de película en Java:
 
 ```java
 public class MovieModel {
@@ -50,91 +55,54 @@ public class MovieModel {
     @SerializedName("poster_path")
     String posterPath;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getOriginalTitle() {
-        return originalTitle;
-    }
-
-    public String getOverview() {
-        return overview;
-    }
-
-    public String getPosterPath() {
-        return posterPath;
-    }
+    // Getters y Setters
 }
 ```
 
-## Api
+Puedes observar más detalles sobre este modelo
+en [MovieModel](../data/datasource/web/models/MovieModel.java).
+
+## API
 
 ### Kotlin
 
+Dentro del contexto de Retrofit, el servicio se define como una interfaz que declara métodos para
+interactuar con los puntos finales de la API.
+
 #### Service
 
-El servicio es una interfaz con los métodos que llaman a los servicios por medio de Retrofit, como
-en el siguiente ejemplo:
-
-Los siguientes archivos serán guardados en la ruta: (Paquete)>data>datasourse>
-web>[api](../data/datasource/web/api).
+En Kotlin, un ejemplo de un servicio que utiliza Retrofit para cargar películas sería:
 
 ```kotlin
-interface MovieService {
+interface MovieServiceKts {
     @GET("discover/movie")
-    suspend fun loadMovies(
+    fun loadMovies(
         @Query("api_key") apiKey: String
-    ): Response<MoviesResponse>
+    ): LiveData<ApiResponseKts<MoviesResponseKts>>
 }
 ```
 
-Consulte [MovieService](../data/datasource/web/api/MovieServiceKts.kt) para visualizarlo mejor.
-
-#### Helper
-
-Es la interfaz que se implementará poco después, en el implementador.
-
-```kotlin
-interface MovieHelper {
-    suspend fun loadMovies(apiKey: String, webStatus: WebStatus<MoviesResponse>)
-}
-```
-
-Consulte [MovieHelper](../data/datasource/web/api/MovieHelperKts.kt) para visualizarlo mejor.
-
-#### Helper Implement
-
-La clase implementadora del helper recibirá una instancia de la interfaz del servicio (por medio de
-inyección de dependencias, anteponiendo la anotación `@Inject` en el constructor), para que los
-métodos heredados de la interfaz retornen los del servicio.
-
-```kotlin
-class MovieHelperImp @Inject constructor(private val movieService: MovieService) : MovieHelper {
-    override suspend fun loadMovies(apiKey: String, webStatus: WebStatus<MoviesResponse>) =
-        Resolve(movieService.loadMovies(apiKey), webStatus).invoke()
-}
-```
-
-- Consulte [MovieHelperImp](../data/datasource/web/api/MovieHelperKtsImp.kt) para visualizarlo mejor.
-- Consulte [Resolve](../data/datasource/web/util/ResolveKts.kt).
-- Consulte [WebStatus](../data/datasource/web/util/WebStatusKts.kt).
+Para una visualización más detallada de este servicio,
+revisa [MovieServiceKts](../data/datasource/web/api/MovieServiceKts.kt).
 
 ### Java
 
+En Java, la definición del servicio implica la creación de una interfaz que define los métodos de la
+API utilizando anotaciones de Retrofit.
+
 #### Service
+
+Aquí tienes un ejemplo de cómo se vería un servicio para cargar películas en Java:
 
 ```java
 public interface MovieService {
     @GET("discover/movie")
-    Call<MoviesResponse> loadMovies(@Query("api_key") String apiKey);
-} 
+    LiveData<ApiResponse> loadMovies(@Query("api_key") String apiKey);
+}
 ```
+
+Puedes echar un vistazo más cercano a esta implementación
+en [MovieService](../data/datasource/web/api/MovieService.java).
+
+Esta estructura modular y bien definida facilita la comunicación con la API a través de Retrofit en
+entornos tanto de Kotlin como de Java.

@@ -2,6 +2,8 @@ package com.example.dagger_hilt.sys.di
 
 import com.example.dagger_hilt.BuildConfig
 import com.example.dagger_hilt.data.datasource.web.api.MovieServiceKts
+import com.example.dagger_hilt.data.datasource.web.repository.MovieRepositoryKts
+import com.example.dagger_hilt.domain.IMovieRepositoryKts
 import com.example.dagger_hilt.sys.util.AppExecutorsKts
 import com.example.dagger_hilt.sys.util.LiveDataCallAdapterFactoryKts
 import dagger.Module
@@ -46,6 +48,11 @@ object ApiModuleKts {
     @Singleton
     fun provideMovieService(@Named("retrofitKts") retrofit: Retrofit): MovieServiceKts =
         retrofit.create(MovieServiceKts::class.java)
+
+    @Provides
+    @Singleton
+    fun provideMovieRepository(movieRepositoryKts: MovieRepositoryKts): IMovieRepositoryKts =
+        movieRepositoryKts
 
     @Provides
     @Singleton

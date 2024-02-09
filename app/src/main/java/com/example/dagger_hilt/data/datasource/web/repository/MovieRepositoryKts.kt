@@ -1,4 +1,4 @@
-package com.example.dagger_hilt.domain
+package com.example.dagger_hilt.data.datasource.web.repository
 
 import androidx.lifecycle.LiveData
 import com.example.dagger_hilt.data.datasource.database.dao.MovieDaoKts
@@ -6,6 +6,8 @@ import com.example.dagger_hilt.data.datasource.database.entities.MovieEntityKts
 import com.example.dagger_hilt.data.datasource.web.api.MovieServiceKts
 import com.example.dagger_hilt.data.datasource.web.models.MoviesResponseKts
 import com.example.dagger_hilt.data.datasource.web.models.response.ApiResponseKts
+import com.example.dagger_hilt.domain.IMovieRepositoryKts
+import com.example.dagger_hilt.domain.NetworkBoundResourceKts
 import com.example.dagger_hilt.sys.util.AppExecutorsKts
 import com.example.dagger_hilt.sys.util.ConstantsKts
 import com.example.dagger_hilt.sys.util.ResourceKts
@@ -17,8 +19,8 @@ class MovieRepositoryKts @Inject constructor(
     private val dao: MovieDaoKts,
     private val service: MovieServiceKts,
     private val appExecutor: AppExecutorsKts
-) {
-    fun loadMovies(): LiveData<ResourceKts<List<MovieEntityKts>>> =
+) : IMovieRepositoryKts {
+    override fun loadMovies(): LiveData<ResourceKts<List<MovieEntityKts>>> =
         object : NetworkBoundResourceKts<List<MovieEntityKts>, MoviesResponseKts>(appExecutor) {
             override fun saveCallResult(response: MoviesResponseKts) =
                 response.listMovies.forEach { movie ->
@@ -42,6 +44,6 @@ class MovieRepositoryKts @Inject constructor(
                 service.loadMovies(ConstantsKts.API_KEY)
         }.asLiveData()
 
-    fun updateMovie(id: Int, check: Boolean) = dao.updateMovie(id, check)
+    override fun updateMovie(id: Int, check: Boolean) = dao.updateMovie(id, check)
 
 }

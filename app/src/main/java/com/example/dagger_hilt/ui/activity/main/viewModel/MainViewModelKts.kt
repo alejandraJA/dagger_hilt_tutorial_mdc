@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dagger_hilt.data.datasource.database.entities.MovieEntityKts
-import com.example.dagger_hilt.domain.MovieRepositoryKts
+import com.example.dagger_hilt.domain.IMovieRepositoryKts
 import com.example.dagger_hilt.sys.util.ResourceKts
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModelKts @Inject constructor(
-    private val movieRepositoryKts: MovieRepositoryKts
+    private val movieRepositoryKts: IMovieRepositoryKts
 ) : ViewModel() {
 
     val moviesList: LiveData<ResourceKts<List<MovieEntityKts>>> = movieRepositoryKts.loadMovies()

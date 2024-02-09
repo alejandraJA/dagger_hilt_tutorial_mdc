@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 
 import com.example.dagger_hilt.BuildConfig;
 import com.example.dagger_hilt.data.datasource.web.api.MovieService;
+import com.example.dagger_hilt.data.datasource.web.repository.MovieRepository;
+import com.example.dagger_hilt.domain.IMovieRepository;
 import com.example.dagger_hilt.sys.util.AppExecutors;
 import com.example.dagger_hilt.sys.util.LiveDataCallAdapterFactory;
 
@@ -53,6 +55,12 @@ public abstract class ApiModule {
     @Singleton
     public static MovieService provideMovieService(@Named("retrofitJvm") @NonNull Retrofit retrofit) {
         return retrofit.create(MovieService.class);
+    }
+    
+    @Provides
+    @Singleton
+    public static IMovieRepository provideMovieRepository(MovieRepository movieRepository) {
+        return movieRepository;
     }
 
     @Provides

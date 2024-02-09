@@ -1,4 +1,4 @@
-package com.example.dagger_hilt.domain;
+package com.example.dagger_hilt.data.datasource.web.repository;
 
 import androidx.lifecycle.LiveData;
 
@@ -8,6 +8,8 @@ import com.example.dagger_hilt.data.datasource.web.api.MovieService;
 import com.example.dagger_hilt.data.datasource.web.models.response.ApiResponse;
 import com.example.dagger_hilt.data.datasource.web.models.MovieModel;
 import com.example.dagger_hilt.data.datasource.web.models.MoviesResponse;
+import com.example.dagger_hilt.domain.IMovieRepository;
+import com.example.dagger_hilt.domain.NetworkBoundResource;
 import com.example.dagger_hilt.sys.util.AppExecutors;
 import com.example.dagger_hilt.sys.util.Constants;
 import com.example.dagger_hilt.sys.util.Resource;
@@ -19,7 +21,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class MovieRepository {
+public class MovieRepository implements IMovieRepository {
     private final MovieDao dao;
     private final MovieService service;
     private final AppExecutors appExecutors;
@@ -31,6 +33,7 @@ public class MovieRepository {
         this.appExecutors = appExecutors;
     }
 
+    @Override
     public LiveData<Resource<List<MovieEntity>>> loadMovies() {
         return new NetworkBoundResource<List<MovieEntity>, MoviesResponse>(appExecutors) {
             @Override
@@ -66,6 +69,7 @@ public class MovieRepository {
         }.asLiveData();
     }
 
+    @Override
     public void updateMovie(int id, Boolean check) {
         dao.updateMovie(id, check);
     }

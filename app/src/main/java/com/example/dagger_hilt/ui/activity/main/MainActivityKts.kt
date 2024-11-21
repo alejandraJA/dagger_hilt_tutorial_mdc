@@ -22,8 +22,7 @@ class MainActivityKts : AppCompatActivity() {
             layoutInflater
         )
         setContentView(binding.root)
-        val movieList: MutableList<MovieEntityKts>
-        movieList = ArrayList()
+        val movieList: MutableList<MovieEntityKts> = ArrayList()
         val movieAdapterKts =
             MovieAdapterKts(movieList) { id: Int, check: Boolean ->
                 viewModel.updateMovie(id, check)

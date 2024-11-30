@@ -1,5 +1,5 @@
 # Proyecto de Ejemplo: Aplicación Android con Clean Architecture
-[Ir al Tutorial](app/src/main/java/com/example/dagger_hilt/README.md)
+[Ir al Tutorial](app/src/main/java/com/example/gob_fact/README.md)
 
 Este proyecto de ejemplo se centra en la creación de una aplicación Android utilizando las mejores
 prácticas recomendadas por la arquitectura de Android. Implementa Clean Architecture para garantizar

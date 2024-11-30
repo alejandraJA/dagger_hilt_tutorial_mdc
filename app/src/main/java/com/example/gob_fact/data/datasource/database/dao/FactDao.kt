@@ -6,6 +6,7 @@ import com.example.gob_fact.data.datasource.database.entities.MovieEntity
 import androidx.lifecycle.LiveData
 import androidx.room.Insert
 import androidx.room.Query
+import com.example.gob_fact.data.datasource.database.entities.FactEntity
 
 @Dao
 interface FactDao {
@@ -23,4 +24,10 @@ interface FactDao {
 
     @Query("SELECT COUNT(*) FROM movie")
     fun countMovies(): Int
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun setFact(factEntity: FactEntity)
+
+    @Query("SELECT * FROM fact")
+    fun getFacts(): LiveData<List<FactEntity>>
 }

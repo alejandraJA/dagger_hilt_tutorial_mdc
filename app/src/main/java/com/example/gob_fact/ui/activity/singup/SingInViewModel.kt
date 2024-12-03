@@ -1,4 +1,4 @@
-package com.example.gob_fact.ui.activity.singup.viewModel
+package com.example.gob_fact.ui.activity.singup
 
 import androidx.lifecycle.ViewModel
 import com.example.gob_fact.domain.StorageRepository

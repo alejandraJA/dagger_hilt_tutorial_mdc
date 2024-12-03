@@ -30,4 +30,7 @@ interface FactDao {
 
     @Query("SELECT * FROM fact")
     fun getFacts(): LiveData<List<FactEntity>>
+
+    @Query("DELETE FROM fact")
+    fun deleteFacts()
 }

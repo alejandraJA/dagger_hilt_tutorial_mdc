@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.gob_fact.databinding.ActivitySingInBinding
 import com.example.gob_fact.sys.util.UtilsText.isNotBlank
 import com.example.gob_fact.ui.activity.main.MainActivity
-import com.example.gob_fact.ui.activity.singup.viewModel.SingInViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

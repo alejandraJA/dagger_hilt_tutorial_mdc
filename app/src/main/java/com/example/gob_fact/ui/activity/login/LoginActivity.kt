@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.gob_fact.databinding.ActivityLoginBinding
 import com.example.gob_fact.sys.util.UtilsText.isNotBlank
-import com.example.gob_fact.ui.activity.login.viewModel.LoginViewModel
 import com.example.gob_fact.ui.activity.main.MainActivity
 import com.example.gob_fact.ui.activity.singup.SingInActivity
 import dagger.hilt.android.AndroidEntryPoint

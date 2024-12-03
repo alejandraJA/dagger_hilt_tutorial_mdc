@@ -82,5 +82,8 @@ class FactRepository @Inject constructor(
 
         }.asLiveData()
 
+    override fun deleteFacts() = dao.deleteFacts()
+
+    override fun getFacts(): LiveData<List<FactEntity>> = dao.getFacts()
 
 }

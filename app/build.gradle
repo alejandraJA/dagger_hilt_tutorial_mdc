@@ -34,7 +34,7 @@ android {
             release {
                 minifyEnabled false
                 proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-                buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
+                buildConfigField("String", "BASE_URL", "\"https://api.datos.gob.mx/v1/\"")
                 buildConfigField "String", "API_KEY", "\"f1d25ec5c0f90889e99aff4ab6a492ad\""
                 buildConfigField "String", "BASE_URL_IMAGES", "\"https://image.tmdb.org/t/p/w500\""
             }
@@ -42,7 +42,7 @@ android {
                 applicationIdSuffix ".debug"
                 debuggable true
                 versionNameSuffix "-alpha"
-                buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
+                buildConfigField("String", "BASE_URL", "\"https://api.datos.gob.mx/v1/\"")
                 buildConfigField "String", "API_KEY", "\"f1d25ec5c0f90889e99aff4ab6a492ad\""
                 buildConfigField "String", "BASE_URL_IMAGES", "\"https://image.tmdb.org/t/p/w500\""
             }
@@ -117,6 +117,9 @@ android {
         implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
         implementation 'com.squareup.okhttp3:okhttp:4.10.0'
         implementation 'com.squareup.okhttp3:okhttp-urlconnection:4.3.0' // Java Net Cookie Jar
+
+        // Splash Screen
+        implementation("androidx.core:core-splashscreen:1.0.1")
     }
     namespace 'com.example.gob_fact'
     buildFeatures {
@@ -128,4 +131,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
+    implementation 'androidx.activity:activity:1.9.3'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.7'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7'
+    implementation 'androidx.fragment:fragment-ktx:1.8.5'
 }

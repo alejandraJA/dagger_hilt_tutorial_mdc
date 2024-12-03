@@ -1,4 +1,4 @@
-package com.example.gob_fact.ui.activity.login.viewModel
+package com.example.gob_fact.ui.activity.login
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

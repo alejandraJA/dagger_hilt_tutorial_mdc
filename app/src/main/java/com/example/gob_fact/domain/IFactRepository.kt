@@ -9,4 +9,6 @@ interface IFactRepository {
     fun loadMovies(): LiveData<Resource<List<MovieEntity>>>
     fun updateMovie(id: Int, check: Boolean)
     fun loadFacts(): LiveData<Resource<List<FactEntity>>>
+    fun deleteFacts()
+    fun getFacts(): LiveData<List<FactEntity>>
 }

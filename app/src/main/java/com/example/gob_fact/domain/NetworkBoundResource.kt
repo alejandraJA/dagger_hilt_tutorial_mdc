@@ -18,10 +18,10 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
     private val result = MediatorLiveData<Resource<ResultType>>()
 
     init {
-        result.value = Resource.loading(null)
         @Suppress("LeakingThis")
         val dbSource = loadFromDb()
         result.addSource(dbSource) { data ->
+            result.value = Resource.loading(null)
             result.removeSource(dbSource)
             if (shouldFetch(data))
                 fetchFromNetwork(dbSource)

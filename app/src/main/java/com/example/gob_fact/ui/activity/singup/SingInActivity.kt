@@ -1,17 +1,26 @@
 package com.example.gob_fact.ui.activity.singup
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import com.example.gob_fact.R
 import com.example.gob_fact.databinding.ActivitySingInBinding
 import com.example.gob_fact.sys.util.UtilsText.isNotBlank
 import com.example.gob_fact.ui.activity.main.MainActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,13 +29,54 @@ class SingInActivity : AppCompatActivity() {
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
     private lateinit var binding: ActivitySingInBinding
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private val RC_SIGN_IN = 9001
+    private lateinit var viewModel: SingInViewModel
+
+    private val googleSignInLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                firebaseAuthWithGoogle(account?.idToken!!)
+            } catch (e: ApiException) {
+                e.printStackTrace()
+                Snackbar.make(
+                    binding.root,
+                    "Sing in failed",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
+        else {
+            Snackbar.make(
+                binding.root,
+                "Sing in failed",
+                Snackbar.LENGTH_SHORT
+            ).show()
+        }
+    }
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val viewModel = ViewModelProvider(this)[SingInViewModel::class.java]
+        viewModel = ViewModelProvider(this)[SingInViewModel::class.java]
         binding = ActivitySingInBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestProfile()
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        binding.signInButton.setOnClickListener {
+            signIn()
+        }
 
         binding.buttonSingIn.setOnClickListener {
             if (binding.layoutEmail.isNotBlank() && binding.layoutPassword.isNotBlank()) {
@@ -35,7 +85,7 @@ class SingInActivity : AppCompatActivity() {
                         viewModel,
                         userName = binding.inputEmail.text.toString().trim(),
                         password = binding.inputPassword.text.toString().trim()
-                        )
+                    )
                 } else {
                     viewModel.singIn(
                         userName = binding.inputEmail.text.toString().trim(),
@@ -47,6 +97,31 @@ class SingInActivity : AppCompatActivity() {
             }
         }
         setOtherConfigurations()
+    }
+
+    private fun signIn() {
+        val signInIntent = googleSignInClient.signInIntent
+        googleSignInLauncher.launch(signInIntent)
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        FirebaseAuth.getInstance().signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val user = FirebaseAuth.getInstance().currentUser!!
+                    viewModel.singIn(user.email.toString(), user.displayName.toString())
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    Snackbar.make(
+                        binding.root,
+                        "Sing in failed",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            }
     }
 
     @SuppressLint("SourceLockedOrientationActivity")

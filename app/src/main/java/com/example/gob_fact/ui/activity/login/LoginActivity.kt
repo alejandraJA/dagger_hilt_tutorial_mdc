@@ -14,6 +14,7 @@ import com.example.gob_fact.sys.util.UtilsText.isNotBlank
 import com.example.gob_fact.ui.activity.main.MainActivity
 import com.example.gob_fact.ui.activity.singup.SingInActivity
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,8 +32,12 @@ class LoginActivity : AppCompatActivity() {
         }
 
         viewModel.userName.observe(this) {
-            if (!it) {
+            if (!it || FirebaseAuth.getInstance().currentUser == null) {
                 startActivity(Intent(this, SingInActivity::class.java))
+                finish()
+            }
+            if (FirebaseAuth.getInstance().currentUser != null) {
+                startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }
         }

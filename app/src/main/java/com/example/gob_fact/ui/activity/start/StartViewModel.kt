@@ -18,14 +18,6 @@ class StartViewModel @Inject constructor(
     private val repository: FactRepository
 ) : ViewModel() {
 
-    init {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                repository.deleteFacts()
-            }
-        }
-    }
-
     private val _facts: MediatorLiveData<List<FactEntity>> =
         MediatorLiveData<List<FactEntity>>().apply {
             viewModelScope.launch {

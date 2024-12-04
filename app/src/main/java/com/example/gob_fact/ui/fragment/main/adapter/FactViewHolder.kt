@@ -1,4 +1,4 @@
-package com.example.gob_fact.ui.activity.main.adapter
+package com.example.gob_fact.ui.fragment.main.adapter
 
 import android.view.View
 import android.widget.CompoundButton

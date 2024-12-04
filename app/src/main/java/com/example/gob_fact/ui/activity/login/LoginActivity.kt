@@ -32,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         viewModel.userName.observe(this) {
-            if (!it || FirebaseAuth.getInstance().currentUser == null) {
+            if (!it) {
                 startActivity(Intent(this, SingInActivity::class.java))
                 finish()
             }

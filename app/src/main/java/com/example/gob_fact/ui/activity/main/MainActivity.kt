@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.gob_fact.R
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
 import com.example.gob_fact.databinding.ActivityMainBinding
-import com.example.gob_fact.ui.activity.main.adapter.FactAdapter
+import com.example.gob_fact.ui.fragment.main.adapter.FactAdapter
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 

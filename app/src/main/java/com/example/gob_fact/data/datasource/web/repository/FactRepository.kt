@@ -1,6 +1,7 @@
 package com.example.gob_fact.data.datasource.web.repository
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagingSource
 import com.example.gob_fact.data.datasource.database.dao.FactDao
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
 import com.example.gob_fact.data.datasource.web.api.FactService
@@ -58,6 +59,8 @@ class FactRepository @Inject constructor(
     override fun deleteFacts() = dao.deleteFacts()
 
     override fun getFacts(): LiveData<List<FactEntity>> = dao.getFacts()
+    override fun getFactsPaginated(pageSize: Int, offset: Int): List<FactEntity> = dao.getFactsPaginated(pageSize, offset)
+    override fun searchFactPaginated(query: String, pageSize: Int, offset: Int): List<FactEntity> = dao.searchFactPaginated(query, pageSize, offset)
     override fun getFact(factId: String): LiveData<FactEntity?> = dao.getFact(factId)
     override fun searchFact(query: String): LiveData<List<FactEntity>> = dao.searchFact(query)
 

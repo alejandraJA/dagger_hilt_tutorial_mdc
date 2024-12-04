@@ -10,11 +10,13 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.gob_fact.R
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
 import com.example.gob_fact.databinding.ActivityMainBinding
 import com.example.gob_fact.databinding.FragmentMainBinding
-import com.example.gob_fact.ui.activity.main.adapter.FactAdapter
+import com.example.gob_fact.ui.fragment.main.adapter.FactAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -48,39 +50,58 @@ class MainFragment : Fragment() {
     }
 
     private fun initSearchFact() {
-        viewModel.searchFact(null)
+        viewModel.loadMoreFacts(null)
         binding.searchFactsView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                viewModel.searchFact(query)
+                query?.let {
+                    adapter.clear()
+                    viewModel.searchFacts(it)
+                }
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                viewModel.searchFact(newText)
                 return true
             }
         })
     }
 
     private fun initRecycler() {
-        adapter = FactAdapter(facts) { position ->
-            val fact = facts[position]
-            val bundle = Bundle().apply {
-                putString("fact_id", fact.id)
-            }
-            findNavController().navigate(
-                R.id.action_mainFragment_to_fragment_fact,
-                bundle
-            )
-        }
+        adapter = FactAdapter(facts,
+            factInterface = { position ->
+                val fact = facts[position]
+                val bundle = Bundle().apply {
+                    putString("fact_id", fact.id)
+                }
+                findNavController().navigate(
+                    R.id.action_mainFragment_to_fragment_fact,
+                    bundle
+                )
+            },
+            loadMoreFacts = {
+                viewModel.loadMoreFacts(null)
+            })
         binding.recyclerFact.adapter = adapter
+        binding.recyclerFact.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                val totalItemCount = layoutManager.itemCount
+
+                if (lastVisibleItemPosition + 5 >= totalItemCount) {
+                    viewModel.loadMoreFacts(null)
+                }
+            }
+        })
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun setObservers() {
         viewModel.facts.observe(viewLifecycleOwner) {
-            facts.clear()
-            facts.addAll(it)
+            adapter.addFacts(it)
+            adapter.setLoading(false)
             adapter.notifyDataSetChanged()
         }
     }

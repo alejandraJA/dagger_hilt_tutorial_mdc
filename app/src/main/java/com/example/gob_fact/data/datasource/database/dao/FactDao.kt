@@ -3,9 +3,11 @@ package com.example.gob_fact.data.datasource.database.dao
 import androidx.room.Dao
 import androidx.room.OnConflictStrategy
 import androidx.lifecycle.LiveData
+import androidx.paging.PagingSource
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
+import com.example.gob_fact.data.datasource.web.models.Pagination
 
 @Dao
 interface FactDao {
@@ -28,4 +30,19 @@ interface FactDao {
         WHERE organization LIKE '%' || :query || '%'
         """)
     fun searchFact(query: String): LiveData<List<FactEntity>>
+
+    @Query("""
+        SELECT * 
+        FROM fact 
+        WHERE organization LIKE '%' || :query || '%'
+        LIMIT :pageSize OFFSET :offset
+    """)
+    fun searchFactPaginated(query: String, pageSize: Int, offset: Int): List<FactEntity>
+
+    @Query("""
+        SELECT * 
+        FROM fact 
+        LIMIT :pageSize OFFSET :offset
+    """)
+    fun getFactsPaginated(pageSize: Int, offset: Int): List<FactEntity>
 }

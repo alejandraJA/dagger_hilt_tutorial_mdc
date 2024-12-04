@@ -1,9 +1,15 @@
 package com.example.gob_fact.ui.activity.start
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
@@ -11,9 +17,12 @@ import androidx.lifecycle.lifecycleScope
 import com.example.gob_fact.R
 import com.example.gob_fact.databinding.ActivityStartBinding
 import com.example.gob_fact.ui.activity.login.LoginActivity
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class StartActivity : AppCompatActivity() {
@@ -44,6 +53,12 @@ class StartActivity : AppCompatActivity() {
             insets
         }
 
+        setOtherConfigurations()
+    }
+
+    @SuppressLint("SourceLockedOrientationActivity")
+    private fun setOtherConfigurations() {
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 }
 

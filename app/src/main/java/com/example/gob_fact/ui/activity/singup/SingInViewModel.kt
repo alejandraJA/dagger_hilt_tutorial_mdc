@@ -8,5 +8,13 @@ import javax.inject.Inject
 @HiltViewModel
 class SingInViewModel @Inject constructor(private val storageRepository: StorageRepository) :
     ViewModel() {
+
+    init {
+        storageRepository.isEnableBiometric = false
+    }
+
     fun singIn(userName: String, password: String) = storageRepository.registerUser(userName, password)
+    fun enableBiometric() {
+        storageRepository.isEnableBiometric = true
+    }
 }

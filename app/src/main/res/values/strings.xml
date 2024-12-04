@@ -11,4 +11,9 @@
     <string name="columns">Columns</string>
     <string name="operations">Operations</string>
     <string name="resource">Resource</string>
+    <string name="search">Search</string>
+    <string name="default_web_client_id">YOUR_CLIENT_ID</string>
+    <string name="enable_biometric">Enabled Biometric</string>
+    <string name="or">or</string>
+    <string name="fingerprint">Use fingerprint</string>
 </resources>

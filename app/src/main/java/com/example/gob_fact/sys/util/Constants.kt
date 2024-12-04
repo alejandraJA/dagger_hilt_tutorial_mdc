@@ -9,4 +9,5 @@ object Constants {
     const val USER_MEMORY = "user"
     const val REGISTERED_USER = "registeredUser"
     const val PASSWORD = "password"
+    const val BIOMETRIC = "biometric"
 }

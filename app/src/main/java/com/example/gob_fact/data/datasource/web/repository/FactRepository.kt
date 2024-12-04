@@ -3,9 +3,7 @@ package com.example.gob_fact.data.datasource.web.repository
 import androidx.lifecycle.LiveData
 import com.example.gob_fact.data.datasource.database.dao.FactDao
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
-import com.example.gob_fact.data.datasource.database.entities.MovieEntity
 import com.example.gob_fact.data.datasource.web.api.FactService
-import com.example.gob_fact.data.datasource.web.models.MoviesResponse
 import com.example.gob_fact.data.datasource.web.models.response.ApiResponse
 import com.example.gob_fact.data.datasource.web.models.response.GobFactsResponse
 import com.example.gob_fact.domain.IFactRepository
@@ -22,31 +20,6 @@ class FactRepository @Inject constructor(
     private val service: FactService,
     private val appExecutor: AppExecutors
 ) : IFactRepository {
-    override fun loadMovies(): LiveData<Resource<List<MovieEntity>>> =
-        object : NetworkBoundResource<List<MovieEntity>, MoviesResponse>(appExecutor) {
-            override fun saveCallResult(response: MoviesResponse) =
-                response.listMovies.forEach { movie ->
-                    dao.setMovie(
-                        MovieEntity(
-                            movie.id,
-                            movie.title,
-                            movie.originalTitle,
-                            movie.overview,
-                            movie.posterPath,
-                            like = false
-                        )
-                    )
-                }
-
-            override fun shouldFetch(data: List<MovieEntity>?): Boolean = data.isNullOrEmpty()
-
-            override fun loadFromDb(): LiveData<List<MovieEntity>> = dao.getMovies()
-
-            override fun createCall(): LiveData<ApiResponse<MoviesResponse>> =
-                service.loadMovies(Constants.API_KEY)
-        }.asLiveData()
-
-    override fun updateMovie(id: Int, check: Boolean) = dao.updateMovie(id, check)
 
     override fun loadFacts(): LiveData<Resource<List<FactEntity>>> =
         object : NetworkBoundResource<List<FactEntity>, GobFactsResponse>(appExecutor) {
@@ -85,5 +58,7 @@ class FactRepository @Inject constructor(
     override fun deleteFacts() = dao.deleteFacts()
 
     override fun getFacts(): LiveData<List<FactEntity>> = dao.getFacts()
+    override fun getFact(factId: String): LiveData<FactEntity?> = dao.getFact(factId)
+    override fun searchFact(query: String): LiveData<List<FactEntity>> = dao.searchFact(query)
 
 }

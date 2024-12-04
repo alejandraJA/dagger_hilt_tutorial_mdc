@@ -23,4 +23,15 @@ class Storage @Inject constructor(
         return sharedPreferences.getString(key, "")!!
     }
 
+    fun setBoolean(key: String, value: Boolean) {
+        with(sharedPreferences.edit()) {
+            putBoolean(key, value)
+            commit()
+        }
+    }
+
+    fun getBoolean(key: String, value: Boolean): Boolean {
+        return sharedPreferences.getBoolean(key, value)
+    }
+
 }

@@ -9,6 +9,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val storageRepository: StorageRepository): ViewModel() {
 
+    val isBiometricDisabled: Boolean
+        get() = !storageRepository.isEnableBiometric
     val userName = MutableLiveData<Boolean>().apply {
         value = storageRepository.isUserRegistered()
     }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="16sp"
+    android:padding="256dp"
     tools:context=".ui.activity.singup.SingInActivity">
 
     <TextView

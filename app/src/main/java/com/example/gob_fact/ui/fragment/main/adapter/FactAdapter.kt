@@ -8,7 +8,7 @@ import com.example.gob_fact.data.datasource.database.entities.FactEntity
 
 class FactAdapter(
     private val facts: MutableList<FactEntity>,
-    private val factInterface: (Int) -> Unit,
+    val factInterface: (Int) -> Unit,
     private val loadMoreFacts: () -> Unit
 ) : RecyclerView.Adapter<FactViewHolder>() {
 

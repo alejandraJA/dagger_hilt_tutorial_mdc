@@ -1,36 +1,44 @@
 package com.example.gob_fact.data.datasource.storage
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.example.gob_fact.sys.util.Constants
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
+interface IStorage {
+    fun setString(key: String, value: String)
+    fun getString(key: String): String
+    fun setBoolean(key: String, value: Boolean)
+    fun getBoolean(key: String, value: Boolean): Boolean
+}
+
 class Storage @Inject constructor(
     @ApplicationContext private val app: Context
-) {
+) : IStorage {
 
-    private val sharedPreferences =
+    private val sharedPreferences: SharedPreferences =
         app.getSharedPreferences(Constants.USER_MEMORY, Context.MODE_PRIVATE)
 
-    fun setString(key: String, value: String) {
+    override fun setString(key: String, value: String) {
         with(sharedPreferences.edit()) {
             putString(key, value)
             commit()
         }
     }
 
-    fun getString(key: String): String {
+    override fun getString(key: String): String {
         return sharedPreferences.getString(key, "")!!
     }
 
-    fun setBoolean(key: String, value: Boolean) {
+    override fun setBoolean(key: String, value: Boolean) {
         with(sharedPreferences.edit()) {
             putBoolean(key, value)
             commit()
         }
     }
 
-    fun getBoolean(key: String, value: Boolean): Boolean {
+    override fun getBoolean(key: String, value: Boolean): Boolean {
         return sharedPreferences.getBoolean(key, value)
     }
 

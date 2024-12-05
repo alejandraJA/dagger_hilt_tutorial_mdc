@@ -1,5 +1,6 @@
 package com.example.gob_fact.domain
 
+import com.example.gob_fact.data.datasource.storage.IStorage
 import com.example.gob_fact.data.datasource.storage.Storage
 import com.example.gob_fact.sys.util.Constants
 import com.example.gob_fact.sys.util.Constants.BIOMETRIC
@@ -7,7 +8,7 @@ import com.example.gob_fact.sys.util.Constants.PASSWORD
 import com.example.gob_fact.sys.util.Constants.REGISTERED_USER
 import javax.inject.Inject
 
-class StorageRepository @Inject constructor(private val storage: Storage) {
+class StorageRepository @Inject constructor(private val storage: IStorage) {
 
     private val userName: String
         get() = storage.getString(REGISTERED_USER)

@@ -22,11 +22,11 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainFragment : Fragment() {
 
-    private lateinit var viewModel: MainViewModel
-    private lateinit var binding: FragmentMainBinding
+    lateinit var viewModel: MainViewModel
+    lateinit var binding: FragmentMainBinding
 
     private val facts = mutableListOf<FactEntity>()
-    private lateinit var adapter: FactAdapter
+    lateinit var adapter: FactAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -6,31 +6,31 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="16sp"
-    tools:context=".ui.activity.singup.SingInActivity">
+    android:padding="256dp"
+    tools:context=".ui.activity.login.LoginActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:text="@string/sing_in"
+        android:text="@string/login_now"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_email"
         android:layout_width="match_parent"
+        android:id="@+id/layout_email"
         android:layout_height="wrap_content"
         android:layout_marginTop="16sp"
         android:hint="@string/email"
         app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/input_email"
             android:layout_width="match_parent"
+            android:id="@+id/input_email"
+            android:text="123"
             android:layout_height="match_parent"
-            android:inputType="textEmailAddress"
-            android:text="123" />
+            android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -45,48 +45,41 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/input_password"
             android:layout_width="match_parent"
+            android:text="123"
             android:layout_height="match_parent"
-            android:inputType="textPassword"
-            android:text="123" />
+            android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16sp">
-
-        <CheckBox
-            android:id="@+id/checkbox_enable_biometric"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/enable_biometric"
-            app:layout_constraintEnd_toStartOf="@+id/button_sing_in"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/button_sing_in"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="@string/sing_in"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
+    <Button
+        android:id="@+id/button_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:text="@string/or" />
-    <!--    Sin in with google -->
+        android:layout_gravity="end"
+        android:text="@string/login" />
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/sign_in_button"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/text_or"
+        android:layout_width="wrap_content"
+        style="@style/TextAppearance.Material3.BodySmall"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp" />
+        android:text="@string/or"/>
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:id="@+id/image_fingerprint"
+        android:layout_gravity="center"
+        android:src="@drawable/fingerprint_24dp_e8eaed_fill0_wght400_grad0_opsz24" />
+
+    <TextView
+        android:id="@+id/text_fingerprint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextAppearance.Material3.TitleSmall"
+        android:layout_gravity="center"
+        android:text="@string/fingerprint"/>
+
 </LinearLayout>

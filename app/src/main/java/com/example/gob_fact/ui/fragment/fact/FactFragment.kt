@@ -25,8 +25,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class FactFragment : Fragment() {
 
-    private lateinit var viewModel: FactViewModel
-    private lateinit var binding: FragmentFactBinding
+    lateinit var viewModel: FactViewModel
+    lateinit var binding: FragmentFactBinding
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
 

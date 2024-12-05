@@ -24,7 +24,7 @@ class MainViewModel
 ) : ViewModel() {
 
     private val _facts = MutableLiveData<List<FactEntity>>()
-    val facts: LiveData<List<FactEntity>> = _facts
+    val facts: MutableLiveData<List<FactEntity>> get() = _facts
 
     private var currentPage = 0
     private val pageSize = 10

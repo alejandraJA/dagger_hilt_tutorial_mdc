@@ -26,11 +26,10 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SingInActivity : AppCompatActivity() {
 
+    lateinit var binding: ActivitySingInBinding
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
-    private lateinit var binding: ActivitySingInBinding
     private lateinit var googleSignInClient: GoogleSignInClient
-    private val RC_SIGN_IN = 9001
     private lateinit var viewModel: SingInViewModel
 
     private val googleSignInLauncher = registerForActivityResult(
@@ -99,7 +98,7 @@ class SingInActivity : AppCompatActivity() {
         setOtherConfigurations()
     }
 
-    private fun signIn() {
+    fun signIn() {
         val signInIntent = googleSignInClient.signInIntent
         googleSignInLauncher.launch(signInIntent)
     }

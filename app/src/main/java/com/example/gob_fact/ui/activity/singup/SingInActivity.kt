@@ -35,27 +35,7 @@ class SingInActivity : AppCompatActivity() {
     private val googleSignInLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-            try {
-                val account = task.getResult(ApiException::class.java)
-                firebaseAuthWithGoogle(account?.idToken!!)
-            } catch (e: ApiException) {
-                e.printStackTrace()
-                Snackbar.make(
-                    binding.root,
-                    "Sing in failed",
-                    Snackbar.LENGTH_SHORT
-                ).show()
-            }
-        }
-        else {
-            Snackbar.make(
-                binding.root,
-                "Sing in failed",
-                Snackbar.LENGTH_SHORT
-            ).show()
-        }
+        handleGoogleSignInResult(result.resultCode, result.data)
     }
 
     @SuppressLint("NewApi")
@@ -65,42 +45,59 @@ class SingInActivity : AppCompatActivity() {
         binding = ActivitySingInBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupGoogleSignInClient()
+        setupUI()
+        setOtherConfigurations()
+    }
+
+    private fun setupGoogleSignInClient() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .requestProfile()
             .requestIdToken(getString(R.string.default_web_client_id))
             .build()
-
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+    }
 
-        binding.signInButton.setOnClickListener {
-            signIn()
-        }
+    private fun setupUI() {
+        binding.signInButton.setOnClickListener { signIn() }
+        binding.buttonSingIn.setOnClickListener { handleSignInButtonClick() }
+    }
 
-        binding.buttonSingIn.setOnClickListener {
-            if (binding.layoutEmail.isNotBlank() && binding.layoutPassword.isNotBlank()) {
-                if (binding.checkboxEnableBiometric.isChecked) {
-                    setupBiometricAuthentication(
-                        viewModel,
-                        userName = binding.inputEmail.text.toString().trim(),
-                        password = binding.inputPassword.text.toString().trim()
-                    )
-                } else {
-                    viewModel.singIn(
-                        userName = binding.inputEmail.text.toString().trim(),
-                        password = binding.inputPassword.text.toString().trim()
-                    )
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
-                }
+    private fun handleSignInButtonClick() {
+        if (binding.layoutEmail.isNotBlank() && binding.layoutPassword.isNotBlank()) {
+            if (binding.checkboxEnableBiometric.isChecked) {
+                setupBiometricAuthentication(
+                    userName = binding.inputEmail.text.toString().trim(),
+                    password = binding.inputPassword.text.toString().trim()
+                )
+            } else {
+                viewModel.singIn(
+                    userName = binding.inputEmail.text.toString().trim(),
+                    password = binding.inputPassword.text.toString().trim()
+                )
+                navigateToMainActivity()
             }
         }
-        setOtherConfigurations()
     }
 
     fun signIn() {
         val signInIntent = googleSignInClient.signInIntent
         googleSignInLauncher.launch(signInIntent)
+    }
+
+    private fun handleGoogleSignInResult(resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                firebaseAuthWithGoogle(account?.idToken!!)
+            } catch (e: ApiException) {
+                showSnackBar("Sign in failed")
+            }
+        } else {
+            showSnackBar("Sign in failed")
+        }
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
@@ -110,17 +107,16 @@ class SingInActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val user = FirebaseAuth.getInstance().currentUser!!
                     viewModel.singIn(user.email.toString(), user.displayName.toString())
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
+                    navigateToMainActivity()
                 } else {
-                    Snackbar.make(
-                        binding.root,
-                        "Sing in failed",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
+                    showSnackBar("Sign in failed")
                 }
             }
+    }
+
+    private fun navigateToMainActivity() {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 
     @SuppressLint("SourceLockedOrientationActivity")
@@ -129,52 +125,23 @@ class SingInActivity : AppCompatActivity() {
     }
 
     private fun setupBiometricAuthentication(
-        viewModel: SingInViewModel,
         userName: String,
         password: String
     ) {
         val executor = ContextCompat.getMainExecutor(this)
-        biometricPrompt =
-            BiometricPrompt(this, executor, object : BiometricPrompt.AuthenticationCallback() {
-                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                    super.onAuthenticationError(errorCode, errString)
-                    if (errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON) {
-                        binding.checkboxEnableBiometric.isChecked = false
-                        viewModel.singIn(
-                            userName = userName,
-                            password = password
-                        )
-                        startActivity(Intent(this@SingInActivity, MainActivity::class.java))
-                        finish()
-                    } else {
-                        Snackbar.make(
-                            binding.root,
-                            "Authentication error: $errString $errorCode",
-                            Snackbar.LENGTH_SHORT
-                        ).show()
-                    }
-                }
+        biometricPrompt = BiometricPrompt(this, executor, object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                handleBiometricAuthenticationError(errorCode, errString, userName, password)
+            }
 
-                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                    super.onAuthenticationSucceeded(result)
-                    viewModel.enableBiometric()
-                    viewModel.singIn(
-                        userName = binding.inputEmail.text.toString().trim(),
-                        password = binding.inputPassword.text.toString().trim()
-                    )
-                    startActivity(Intent(this@SingInActivity, MainActivity::class.java))
-                    finish()
-                }
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                handleBiometricAuthenticationSuccess()
+            }
 
-                override fun onAuthenticationFailed() {
-                    super.onAuthenticationFailed()
-                    Snackbar.make(
-                        binding.root,
-                        "Authentication failed",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-            })
+            override fun onAuthenticationFailed() {
+                showSnackBar("Authentication failed")
+            }
+        })
 
         promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle("Biometric login for my app")
@@ -183,5 +150,33 @@ class SingInActivity : AppCompatActivity() {
             .build()
 
         biometricPrompt.authenticate(promptInfo)
+    }
+
+    private fun handleBiometricAuthenticationError(
+        errorCode: Int,
+        errString: CharSequence,
+        userName: String,
+        password: String
+    ) {
+        if (errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON) {
+            binding.checkboxEnableBiometric.isChecked = false
+            viewModel.singIn(userName, password)
+            navigateToMainActivity()
+        } else {
+            showSnackBar("Authentication error: $errString $errorCode")
+        }
+    }
+
+    private fun handleBiometricAuthenticationSuccess() {
+        viewModel.enableBiometric()
+        viewModel.singIn(
+            userName = binding.inputEmail.text.toString().trim(),
+            password = binding.inputPassword.text.toString().trim()
+        )
+        navigateToMainActivity()
+    }
+
+    private fun showSnackBar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 }

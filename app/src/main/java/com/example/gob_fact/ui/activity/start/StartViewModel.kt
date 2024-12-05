@@ -21,12 +21,10 @@ class StartViewModel @Inject constructor(
     private val _facts: MediatorLiveData<List<FactEntity>> =
         MediatorLiveData<List<FactEntity>>().apply {
             viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    addSource(repository.loadFacts()) { factsResource ->
-                        factsResource?.let {
-                            if (factsResource.status == Constants.StatusResponse.SUCCESS)
-                                postValue(factsResource.data)
-                        }
+                addSource(repository.loadFacts()) { factsResource ->
+                    factsResource?.let {
+                        if (factsResource.status == Constants.StatusResponse.SUCCESS)
+                            postValue(factsResource.data)
                     }
                 }
             }

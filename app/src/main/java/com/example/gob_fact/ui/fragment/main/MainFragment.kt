@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gob_fact.R
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
-import com.example.gob_fact.databinding.ActivityMainBinding
 import com.example.gob_fact.databinding.FragmentMainBinding
 import com.example.gob_fact.ui.fragment.main.adapter.FactAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,13 +23,11 @@ class MainFragment : Fragment() {
 
     lateinit var viewModel: MainViewModel
     lateinit var binding: FragmentMainBinding
-
     private val facts = mutableListOf<FactEntity>()
     lateinit var adapter: FactAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
     }
 
@@ -38,13 +35,17 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMainBinding.inflate(layoutInflater, container, false)
+        binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupUI()
         setObservers()
+    }
+
+    private fun setupUI() {
         initRecycler()
         initSearchFact()
     }

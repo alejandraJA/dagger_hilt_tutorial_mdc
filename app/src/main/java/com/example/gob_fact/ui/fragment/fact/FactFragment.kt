@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
+import com.example.gob_fact.data.datasource.database.entities.FactEntity
 import com.example.gob_fact.databinding.FragmentFactBinding
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
@@ -35,8 +36,8 @@ class FactFragment : Fragment() {
         viewModel = ViewModelProvider(this)[FactViewModel::class.java]
         arguments?.let {
             val factId = it.getString("fact_id")
-            factId?.let {
-                viewModel.factId = factId
+            factId?.let { id ->
+                viewModel.factId = id
             }
         }
     }
@@ -45,61 +46,81 @@ class FactFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentFactBinding.inflate(layoutInflater, container, false)
+        binding = FragmentFactBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.fact.observe(viewLifecycleOwner) {
-            if (it == null) return@observe
-            binding.fact = it
-        }
-        viewModel.loadFact()
+        observeViewModel()
         setOnClickListeners()
         initRequestLocation()
     }
 
+    private fun observeViewModel() {
+        viewModel.fact.observe(viewLifecycleOwner) {
+            it?.let { fact ->
+                binding.fact = fact
+            }
+        }
+        viewModel.loadFact()
+    }
+
     private fun initRequestLocation() {
-        val locationManager = requireContext()
-            .getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val locationListener = LocationListener { location ->
             latitude = location.latitude
             longitude = location.longitude
         }
-        val permissionStatus = ActivityCompat.checkSelfPermission(
+        if (checkLocationPermissions()) {
+            requestLocationUpdates(locationManager, locationListener)
+        } else {
+            requestLocationPermissions()
+        }
+    }
+
+    private fun checkLocationPermissions(): Boolean {
+        return ActivityCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.ACCESS_FINE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+        ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.ACCESS_COARSE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED
+        ) == PackageManager.PERMISSION_GRANTED
+    }
 
-        if (permissionStatus) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                1
-            )
-            binding.buttonShareWhatsApp.visibility = View.GONE
+    private fun requestLocationPermissions() {
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            LOCATION_PERMISSION_REQUEST_CODE
+        )
+        binding.buttonShareWhatsApp.visibility = View.GONE
+    }
+
+    private fun requestLocationUpdates(locationManager: LocationManager, locationListener: LocationListener) {
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             return
         }
-        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             location?.let {
                 latitude = it.latitude
                 longitude = it.longitude
             }
         }.addOnFailureListener {
-            Snackbar.make(
-                binding.root,
-                "Error getting location, please enable GPS. For now, use the location service.",
-                Snackbar.LENGTH_LONG
-            ).show()
+            showSnackBar("Error getting location, please enable GPS. For now, use the location service.")
             locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
-                5000,
-                5f,
+                LOCATION_UPDATE_INTERVAL,
+                LOCATION_UPDATE_DISTANCE,
                 locationListener
             )
         }
@@ -107,44 +128,62 @@ class FactFragment : Fragment() {
 
     private fun setOnClickListeners() {
         binding.buttonOpenUrl.setOnClickListener {
-            viewModel.fact.value?.let {
-                val url = it.url
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                startActivity(intent)
+            viewModel.fact.value?.let { fact ->
+                openUrl(fact.url)
             }
         }
         binding.buttonCopyUrl.setOnClickListener {
-            viewModel.fact.value?.let {
-                val url = it.url
-                val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val clip = ClipData.newPlainText("URL", url)
-                clipboard.setPrimaryClip(clip)
+            viewModel.fact.value?.let { fact ->
+                copyToClipboard(fact.url)
             }
         }
         binding.buttonShareWhatsApp.setOnClickListener {
-            viewModel.fact.value?.let {
-                val message =
-                    """
-                    ${it.fact}
-                    _${it.dateInsert}_
-                    
-                    *Organization* ${it.organization}
-                    *Resource* ${it.resource}
-                    *Operations* ${it.operations}
-                    *Columns* ${it.columns}
-                   
-                    🔗 ${it.url}
-                    
-                    _Latitude_ $latitude
-                    _Longitude_ $longitude
-                    """.trimIndent()
-                val intent = Intent(Intent.ACTION_SEND)
-                intent.type = "text/plain"
-                intent.putExtra(Intent.EXTRA_TEXT, message)
-                intent.setPackage("com.whatsapp")
-                startActivity(intent)
+            viewModel.fact.value?.let { fact ->
+                shareOnWhatsApp(fact)
             }
         }
     }
 
+    private fun openUrl(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
+    }
+
+    private fun copyToClipboard(url: String) {
+        val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("URL", url)
+        clipboard.setPrimaryClip(clip)
+    }
+
+    private fun shareOnWhatsApp(fact: FactEntity) {
+        val message = """
+            ${fact.fact}
+            _${fact.dateInsert}_
+
+            *Organization* ${fact.organization}
+            *Resource* ${fact.resource}
+            *Operations* ${fact.operations}
+            *Columns* ${fact.columns}
+
+            🔗 ${fact.url}
+
+            _Latitude_ $latitude
+            _Longitude_ $longitude
+        """.trimIndent()
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_TEXT, message)
+        intent.setPackage("com.whatsapp")
+        startActivity(intent)
+    }
+
+    private fun showSnackBar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
+    }
+
+    companion object {
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1
+        private const val LOCATION_UPDATE_INTERVAL = 5000L
+        private const val LOCATION_UPDATE_DISTANCE = 5f
+    }
 }

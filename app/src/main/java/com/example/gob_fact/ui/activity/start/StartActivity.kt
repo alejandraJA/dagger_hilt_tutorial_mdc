@@ -1,28 +1,18 @@
 package com.example.gob_fact.ui.activity.start
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.example.gob_fact.R
 import com.example.gob_fact.databinding.ActivityStartBinding
 import com.example.gob_fact.ui.activity.login.LoginActivity
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class StartActivity : AppCompatActivity() {
@@ -32,28 +22,35 @@ class StartActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityStartBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this)[StartViewModel::class.java]
 
-        enableEdgeToEdge()
-
-        viewModel.facts.observe(this@StartActivity) {
-            if (it != null) {
-                startActivity(Intent(this@StartActivity, LoginActivity::class.java))
-                finish()
-            }
-        }
-
         setContentView(binding.root)
+        enableEdgeToEdge()
+        setupWindowInsets()
+        observeViewModel()
+        setOtherConfigurations()
+    }
 
+    private fun setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
 
-        setOtherConfigurations()
+    private fun observeViewModel() {
+        viewModel.facts.observe(this) {
+            if (it != null) {
+                navigateToLoginActivity()
+            }
+        }
+    }
+
+    private fun navigateToLoginActivity() {
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 
     @SuppressLint("SourceLockedOrientationActivity")
@@ -61,4 +58,3 @@ class StartActivity : AppCompatActivity() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 }
-

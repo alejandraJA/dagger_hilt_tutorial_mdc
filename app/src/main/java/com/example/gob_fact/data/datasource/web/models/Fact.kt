@@ -2,7 +2,7 @@ package com.example.gob_fact.data.datasource.web.models
 
 import com.google.gson.annotations.SerializedName
 
-data class Facts(
+data class Fact(
     @SerializedName("_id")
     val id: String,
     val columns: String,

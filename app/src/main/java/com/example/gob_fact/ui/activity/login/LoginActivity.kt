@@ -21,57 +21,58 @@ import dagger.hilt.android.AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityLoginBinding
+    private lateinit var viewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
+        viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (viewModel.isBiometricDisabled) {
-            binding.imageFingerprint.visibility = View.GONE
-            binding.textFingerprint.visibility = View.GONE
-            binding.textOr.visibility = View.GONE
-        }
+        setupUI()
+        observeViewModel()
+        setOtherConfigurations()
+    }
 
-        viewModel.userName.observe(this) {
-            if (!it) {
-                startActivity(Intent(this, SingInActivity::class.java))
-                finish()
-            }
-            if (FirebaseAuth.getInstance().currentUser != null) {
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
-            }
+    private fun setupUI() {
+        if (viewModel.isBiometricDisabled) {
+            hideBiometricUI()
         }
 
         binding.buttonLogin.setOnClickListener {
-            authenticateWithUsernameAndPassword(binding, viewModel)
+            authenticateWithUsernameAndPassword()
         }
         binding.imageFingerprint.setOnClickListener {
             authenticateWithFingerprint()
         }
-        setOtherConfigurations()
     }
 
-    @SuppressLint("SourceLockedOrientationActivity")
-    private fun setOtherConfigurations() {
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    private fun hideBiometricUI() {
+        binding.imageFingerprint.visibility = View.GONE
+        binding.textFingerprint.visibility = View.GONE
+        binding.textOr.visibility = View.GONE
     }
 
-    private fun authenticateWithUsernameAndPassword(
-        binding: ActivityLoginBinding,
-        viewModel: LoginViewModel
-    ) {
-        if (binding.layoutEmail.isNotBlank() && binding.layoutPassword.isNotBlank())
+    private fun observeViewModel() {
+        viewModel.userName.observe(this) {
+            if (!it) {
+                navigateToActivity(SingInActivity::class.java)
+            } else if (FirebaseAuth.getInstance().currentUser != null) {
+                navigateToActivity(MainActivity::class.java)
+            }
+        }
+    }
+
+    private fun authenticateWithUsernameAndPassword() {
+        if (binding.layoutEmail.isNotBlank() && binding.layoutPassword.isNotBlank()) {
             if (viewModel.login(
                     userName = binding.inputEmail.text.toString().trim(),
                     password = binding.inputPassword.text.toString().trim()
                 )
             ) {
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
+                navigateToActivity(MainActivity::class.java)
             }
+        }
     }
 
     private fun authenticateWithFingerprint() {
@@ -85,28 +86,32 @@ class LoginActivity : AppCompatActivity() {
         val biometricPrompt = BiometricPrompt(this, executor, object :
             BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                super.onAuthenticationError(errorCode, errString)
-                Snackbar.make(
-                    findViewById(android.R.id.content),
-                    "Authentication error: $errString", Snackbar.LENGTH_SHORT
-                ).show()
+                showSnackBar("Authentication error: $errString")
             }
 
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                super.onAuthenticationSucceeded(result)
-                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                navigateToActivity(MainActivity::class.java)
             }
 
             override fun onAuthenticationFailed() {
-                super.onAuthenticationFailed()
-                Snackbar.make(
-                    findViewById(android.R.id.content),
-                    "Authentication failed", Snackbar.LENGTH_SHORT
-                ).show()
+                showSnackBar("Authentication failed")
             }
         })
 
         biometricPrompt.authenticate(promptInfo)
     }
 
+    private fun navigateToActivity(activityClass: Class<*>) {
+        startActivity(Intent(this, activityClass))
+        finish()
+    }
+
+    private fun showSnackBar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+    }
+
+    @SuppressLint("SourceLockedOrientationActivity")
+    private fun setOtherConfigurations() {
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    }
 }

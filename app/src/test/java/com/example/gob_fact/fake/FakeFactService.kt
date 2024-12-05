@@ -3,7 +3,7 @@ package com.example.gob_fact.fake
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.gob_fact.data.datasource.web.api.FactService
-import com.example.gob_fact.data.datasource.web.models.Facts
+import com.example.gob_fact.data.datasource.web.models.Fact
 import com.example.gob_fact.data.datasource.web.models.Pagination
 import com.example.gob_fact.data.datasource.web.models.response.ApiResponse
 import com.example.gob_fact.data.datasource.web.models.response.GobFactsResponse
@@ -16,7 +16,7 @@ class FakeFactService : FactService {
             GobFactsResponse(
                 pagination = Pagination(1, 1, 1),
                 facts = listOf(
-                    Facts(
+                    Fact(
                         id = "1",
                         columns = "columns",
                         createdAt = 1,
@@ -39,7 +39,7 @@ class FakeFactService : FactService {
                     GobFactsResponse(
                         pagination = Pagination(1, 1, 1),
                         facts = listOf(
-                            Facts(
+                            Fact(
                                 id = "1",
                                 columns = "columns",
                                 createdAt = 1,

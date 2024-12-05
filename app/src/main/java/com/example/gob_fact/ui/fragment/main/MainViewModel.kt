@@ -1,15 +1,10 @@
 package com.example.gob_fact.ui.fragment.main
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingSource
-import androidx.paging.PagingState
-import com.example.gob_fact.data.datasource.database.dao.FactDao
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
-import com.example.gob_fact.data.datasource.web.api.FactService
 import com.example.gob_fact.data.datasource.web.repository.FactRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,8 +13,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel
-@Inject constructor(
+class MainViewModel @Inject constructor(
     private val factRepository: FactRepository
 ) : ViewModel() {
 
@@ -30,32 +24,17 @@ class MainViewModel
     private val pageSize = 10
     private var searchQuery: String? = null
 
+    init {
+        loadMoreFacts(null)
+    }
+
     fun loadMoreFacts(query: String?) {
+        searchQuery = query ?: searchQuery
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                val offset = currentPage * pageSize
-
-                val newFacts = if (query != null) {
-                    searchQuery = query
-                    factRepository.searchFactPaginated(query, pageSize, offset)
-                } else {
-                    searchQuery?.let {
-                        factRepository.searchFactPaginated(it, pageSize, offset)
-                    } ?: factRepository.getFactsPaginated(pageSize, offset)
-                }
-
-                if (newFacts.isNotEmpty()) {
-                    val currentList = _facts.value.orEmpty().toMutableList()
-
-                    if (currentPage == 0) {
-                        _facts.postValue(newFacts)
-                    } else {
-                        currentList.addAll(newFacts)
-                        _facts.postValue(currentList)
-                    }
-
-                    currentPage++
-                }
+            val newFacts = fetchFacts()
+            if (newFacts.isNotEmpty()) {
+                updateFacts(newFacts)
+                currentPage++
             }
         }
     }
@@ -65,7 +44,22 @@ class MainViewModel
         loadMoreFacts(query)
     }
 
-    init {
-        loadMoreFacts(null)
+    private suspend fun fetchFacts(): List<FactEntity> {
+        val offset = currentPage * pageSize
+        return withContext(Dispatchers.IO) {
+            searchQuery?.let {
+                factRepository.searchFactPaginated(it, pageSize, offset)
+            } ?: factRepository.getFactsPaginated(pageSize, offset)
+        }
+    }
+
+    private fun updateFacts(newFacts: List<FactEntity>) {
+        val currentList = _facts.value.orEmpty().toMutableList()
+        if (currentPage == 0) {
+            _facts.postValue(newFacts)
+        } else {
+            currentList.addAll(newFacts)
+            _facts.postValue(currentList)
+        }
     }
 }

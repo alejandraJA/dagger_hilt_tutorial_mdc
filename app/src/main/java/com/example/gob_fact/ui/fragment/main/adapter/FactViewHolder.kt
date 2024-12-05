@@ -8,13 +8,18 @@ import com.example.gob_fact.databinding.ItemFactBinding
 import com.example.gob_fact.sys.util.Constants
 import com.squareup.picasso.Picasso
 
-class FactViewHolder(itemView: View, private val movieInterface: (Int) -> Unit) :
-    RecyclerView.ViewHolder(itemView) {
+class FactViewHolder(
+    itemView: View,
+    private val movieInterface: (Int) -> Unit
+) : RecyclerView.ViewHolder(itemView) {
+
     private val binding = ItemFactBinding.bind(itemView)
+
     fun bind(movieEntity: FactEntity) {
         binding.fact = movieEntity
         binding.cardFact.setOnClickListener {
-            movieInterface(adapterPosition)
+            movieInterface(absoluteAdapterPosition)
         }
     }
+
 }

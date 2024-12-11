@@ -17,9 +17,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
+import com.example.gob_fact.R
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
 import com.example.gob_fact.databinding.FragmentFactBinding
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.color.MaterialColors.getColor
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,6 +42,7 @@ class FactFragment : Fragment() {
                 viewModel.factId = id
             }
         }
+        requireActivity().window.statusBarColor = requireActivity().getColor(R.color.white)
     }
 
     override fun onCreateView(
@@ -182,7 +185,7 @@ class FactFragment : Fragment() {
     }
 
     companion object {
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 1
+        const val LOCATION_PERMISSION_REQUEST_CODE = 1
         private const val LOCATION_UPDATE_INTERVAL = 5000L
         private const val LOCATION_UPDATE_DISTANCE = 5f
     }

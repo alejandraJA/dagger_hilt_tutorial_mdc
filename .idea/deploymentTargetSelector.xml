@@ -19,9 +19,6 @@
       <SelectionState runConfigName="MainViewModelTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="loadMoreFacts()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="searchFacts()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>

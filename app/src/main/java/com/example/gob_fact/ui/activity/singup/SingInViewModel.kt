@@ -17,4 +17,12 @@ class SingInViewModel @Inject constructor(private val storageRepository: Storage
     fun enableBiometric() {
         storageRepository.isEnableBiometric = true
     }
+
+    fun singInWithGoogle(idToken: String, displayName: String) {
+        storageRepository.registerUser(displayName, idToken)
+    }
+
+    fun signInWithGoogle(idToken: String, displayName: String?) {
+        storageRepository.registerUser(displayName ?: "User", idToken)
+    }
 }

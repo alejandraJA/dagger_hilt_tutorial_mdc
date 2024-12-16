@@ -1,7 +1,6 @@
 package com.example.gob_fact.domain
 
 import androidx.lifecycle.LiveData
-import androidx.paging.PagingSource
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
 import com.example.gob_fact.sys.util.Resource
 

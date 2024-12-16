@@ -12,8 +12,6 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.gob_fact.R
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
 import com.example.gob_fact.databinding.FragmentMainBinding
@@ -70,17 +68,18 @@ class HomeFragment : Fragment() {
     }
 
     private fun initSearchFact() {
-        viewModel.loadMoreFacts(null)
+        viewModel.searchFacts(null)
         binding.searchFactsView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let {
-                    adapter.clear()
-                    viewModel.searchFacts(it)
-                }
+                viewModel.searchFacts(query)
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    adapter.clear()
+                    viewModel.searchFacts(it)
+                }
                 return true
             }
         })
@@ -95,31 +94,23 @@ class HomeFragment : Fragment() {
             findNavController().navigate(
                 R.id.action_mainFragment_to_fragment_fact, bundle
             )
-        }, loadMoreFacts = {
-            viewModel.loadMoreFacts(null)
-        })
+        }, loadMoreFacts = {})
         binding.recyclerFact.adapter = adapter
-        binding.recyclerFact.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-                val totalItemCount = layoutManager.itemCount
-
-                if (lastVisibleItemPosition + 5 >= totalItemCount) {
-                    viewModel.loadMoreFacts(null)
-                }
-            }
-        })
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun setObservers() {
         viewModel.facts.observe(viewLifecycleOwner) {
-            adapter.addFacts(it)
-            adapter.setLoading(false)
-            adapter.notifyDataSetChanged()
+            if (it.isEmpty()) {
+                binding.recyclerFact.visibility = View.GONE
+                binding.noDataLayout.visibility = View.VISIBLE
+            } else {
+                adapter.addFacts(it)
+                adapter.setLoading(false)
+                adapter.notifyDataSetChanged()
+                binding.recyclerFact.visibility = View.VISIBLE
+                binding.noDataLayout.visibility = View.GONE
+            }
         }
     }
 }

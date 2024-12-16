@@ -16,4 +16,5 @@
     <string name="enable_biometric">Enabled Biometric</string>
     <string name="or">or</string>
     <string name="fingerprint">Use fingerprint</string>
+    <string name="no_data">Nothing to show</string>
 </resources>

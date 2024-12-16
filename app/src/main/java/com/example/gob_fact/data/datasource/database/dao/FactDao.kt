@@ -19,13 +19,19 @@ interface FactDao {
     @Query("DELETE FROM fact")
     fun deleteFacts()
 
-    @Query("SELECT * FROM fact WHERE id == :factId")
+    @Query("""
+        SELECT * 
+        FROM fact 
+        WHERE id == :factId 
+        ORDER BY fact ASC
+        """)
     fun getFact(factId: String): LiveData<FactEntity?>
 
     @Query("""
         SELECT * 
         FROM fact 
         WHERE organization LIKE '%' || :query || '%'
+        ORDER BY fact ASC
         """)
     fun searchFact(query: String): LiveData<List<FactEntity>>
 

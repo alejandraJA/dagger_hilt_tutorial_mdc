@@ -8,9 +8,8 @@ import javax.inject.Singleton
 class GetFactsUseCase @Inject constructor(
     private val factRepository: IFactRepository
 ) {
-    operator fun invoke() = factRepository.getFacts()
     operator fun invoke(query: String?) =
         if (query == null) factRepository.getFacts()
-        else factRepository.searchFact(query)
+        else factRepository.searchFact(query.trim())
 }
 

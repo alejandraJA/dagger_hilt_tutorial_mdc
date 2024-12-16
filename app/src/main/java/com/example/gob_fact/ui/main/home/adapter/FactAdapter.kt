@@ -30,9 +30,8 @@ class FactAdapter(
     override fun getItemCount(): Int = facts.size
 
     fun addFacts(newFacts: List<FactEntity>) {
-        val startPosition = facts.size
+        facts.clear()
         facts.addAll(newFacts)
-        notifyItemRangeInserted(startPosition, newFacts.size)
     }
 
     fun setLoading(loading: Boolean) {

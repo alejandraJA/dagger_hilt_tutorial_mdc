@@ -17,23 +17,13 @@ class HomeViewModel @Inject constructor(
     val facts: MutableLiveData<List<FactEntity>> get() = _facts
 
     init {
-        loadMoreFacts(null)
-    }
-
-    fun loadMoreFacts(query: String?) {
-        _facts.addSource(getFactsUseCase(query)) { factsResource ->
-            factsResource?.let {
-                if (factsResource.isNotEmpty())
-                    _facts.postValue(factsResource)
-            }
-        }
+        searchFacts(null)
     }
 
     fun searchFacts(query: String?) {
-        _facts.addSource(getFactsUseCase()) { factsResource ->
+        _facts.addSource(getFactsUseCase(query)) { factsResource ->
             factsResource?.let {
-                if (factsResource.isNotEmpty())
-                    _facts.postValue(factsResource)
+                _facts.postValue(factsResource)
             }
         }
     }

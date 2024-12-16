@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
-import com.example.gob_fact.data.datasource.web.repository.FactRepository
+import com.example.gob_fact.domain.IFactRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val factRepository: FactRepository
+    private val factRepository: IFactRepository
 ) : ViewModel() {
 
     private val _facts = MutableLiveData<List<FactEntity>>()

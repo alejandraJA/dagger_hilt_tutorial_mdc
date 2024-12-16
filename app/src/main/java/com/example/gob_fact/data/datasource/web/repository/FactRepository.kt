@@ -11,11 +11,8 @@ import com.example.gob_fact.domain.IFactRepository
 import com.example.gob_fact.domain.NetworkBoundResource
 import com.example.gob_fact.sys.util.AppExecutors
 import com.example.gob_fact.sys.util.Resource
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class FactRepository @Inject constructor(
+class FactRepository (
     private val dao: FactDao,
     private val service: FactService,
     private val appExecutor: AppExecutors

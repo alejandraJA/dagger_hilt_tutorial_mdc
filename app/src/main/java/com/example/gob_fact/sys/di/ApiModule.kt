@@ -2,8 +2,6 @@ package com.example.gob_fact.sys.di
 
 import com.example.gob_fact.BuildConfig
 import com.example.gob_fact.data.datasource.web.api.FactService
-import com.example.gob_fact.data.datasource.web.repository.FactRepository
-import com.example.gob_fact.domain.IFactRepository
 import com.example.gob_fact.sys.util.AppExecutors
 import com.example.gob_fact.sys.util.LiveDataCallAdapterFactory
 import dagger.Module
@@ -45,11 +43,6 @@ object ApiModule {
     @Singleton
     fun provideFactService(retrofit: Retrofit): FactService =
         retrofit.create(FactService::class.java)
-
-    @Provides
-    @Singleton
-    fun provideFactRepository(factRepository: FactRepository): IFactRepository =
-        factRepository
 
     @Provides
     @Singleton

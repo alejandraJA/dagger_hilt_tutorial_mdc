@@ -32,13 +32,11 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-        if (!checkLocationPermissions())
-            requestLocationPermissions()
+        if (!checkLocationPermissions()) requestLocationPermissions()
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
@@ -46,11 +44,9 @@ class HomeFragment : Fragment() {
 
     private fun checkLocationPermissions(): Boolean {
         return ActivityCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.ACCESS_FINE_LOCATION
+            requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.ACCESS_COARSE_LOCATION
+            requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
     }
 
@@ -91,20 +87,17 @@ class HomeFragment : Fragment() {
     }
 
     private fun initRecycler() {
-        adapter = FactAdapter(facts,
-            factInterface = { position ->
-                val fact = facts[position]
-                val bundle = Bundle().apply {
-                    putString("fact_id", fact.id)
-                }
-                findNavController().navigate(
-                    R.id.action_mainFragment_to_fragment_fact,
-                    bundle
-                )
-            },
-            loadMoreFacts = {
-                viewModel.loadMoreFacts(null)
-            })
+        adapter = FactAdapter(facts, factInterface = { position ->
+            val fact = facts[position]
+            val bundle = Bundle().apply {
+                putString("fact_id", fact.id)
+            }
+            findNavController().navigate(
+                R.id.action_mainFragment_to_fragment_fact, bundle
+            )
+        }, loadMoreFacts = {
+            viewModel.loadMoreFacts(null)
+        })
         binding.recyclerFact.adapter = adapter
         binding.recyclerFact.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

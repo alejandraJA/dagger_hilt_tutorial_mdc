@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
-import com.example.gob_fact.data.datasource.web.repository.FactRepository
+import com.example.gob_fact.domain.IFactRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class FactViewModel @Inject constructor(
-    private val factRepository: FactRepository
+    private val factRepository: IFactRepository
 ): ViewModel() {
 
     private var _factId: String = ""

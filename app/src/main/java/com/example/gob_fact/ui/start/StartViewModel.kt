@@ -4,7 +4,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
-import com.example.gob_fact.data.datasource.web.repository.FactRepository
+import com.example.gob_fact.domain.IFactRepository
 import com.example.gob_fact.sys.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StartViewModel @Inject constructor(
-    private val repository: FactRepository
+    private val repository: IFactRepository
 ) : ViewModel() {
 
     private val _facts: MediatorLiveData<List<FactEntity>> =

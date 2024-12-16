@@ -1,64 +1,41 @@
 package com.example.gob_fact.ui.main.home
 
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
-import com.example.gob_fact.domain.IFactRepository
+import com.example.gob_fact.domain.usecase.GetFactsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val factRepository: IFactRepository
+    private val getFactsUseCase: GetFactsUseCase,
 ) : ViewModel() {
 
-    private val _facts = MutableLiveData<List<FactEntity>>()
+    private val _facts = MediatorLiveData<List<FactEntity>>()
     val facts: MutableLiveData<List<FactEntity>> get() = _facts
-
-    private var currentPage = 0
-    private val pageSize = 10
-    private var searchQuery: String? = null
 
     init {
         loadMoreFacts(null)
     }
 
     fun loadMoreFacts(query: String?) {
-        searchQuery = query ?: searchQuery
-        viewModelScope.launch {
-            val newFacts = fetchFacts()
-            if (newFacts.isNotEmpty()) {
-                updateFacts(newFacts)
-                currentPage++
+        _facts.addSource(getFactsUseCase(query)) { factsResource ->
+            factsResource?.let {
+                if (factsResource.isNotEmpty())
+                    _facts.postValue(factsResource)
             }
         }
     }
 
-    fun searchFacts(query: String) {
-        currentPage = 0
-        loadMoreFacts(query)
-    }
-
-    private suspend fun fetchFacts(): List<FactEntity> {
-        val offset = currentPage * pageSize
-        return withContext(Dispatchers.IO) {
-            searchQuery?.let {
-                factRepository.searchFactPaginated(it, pageSize, offset)
-            } ?: factRepository.getFactsPaginated(pageSize, offset)
+    fun searchFacts(query: String?) {
+        _facts.addSource(getFactsUseCase()) { factsResource ->
+            factsResource?.let {
+                if (factsResource.isNotEmpty())
+                    _facts.postValue(factsResource)
+            }
         }
     }
 
-    private fun updateFacts(newFacts: List<FactEntity>) {
-        val currentList = _facts.value.orEmpty().toMutableList()
-        if (currentPage == 0) {
-            _facts.postValue(newFacts)
-        } else {
-            currentList.addAll(newFacts)
-            _facts.postValue(currentList)
-        }
-    }
 }

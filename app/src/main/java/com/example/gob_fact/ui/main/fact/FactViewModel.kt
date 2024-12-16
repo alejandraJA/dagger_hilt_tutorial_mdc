@@ -4,14 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
-import com.example.gob_fact.domain.IFactRepository
+import com.example.gob_fact.domain.usecase.GetFactUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class FactViewModel @Inject constructor(
-    private val factRepository: IFactRepository
-): ViewModel() {
+    private val getFactUseCase: GetFactUseCase
+) : ViewModel() {
 
     private var _factId: String = ""
 
@@ -25,7 +25,7 @@ class FactViewModel @Inject constructor(
     val fact: LiveData<FactEntity?> get() = _fact
 
     fun loadFact() {
-        _fact.addSource(factRepository.getFact(factId)) {
+        _fact.addSource(getFactUseCase(factId)) {
             _fact.value = it
         }
     }

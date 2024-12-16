@@ -7,7 +7,7 @@ import com.example.gob_fact.data.datasource.web.api.FactService
 import com.example.gob_fact.data.datasource.web.models.response.ApiResponse
 import com.example.gob_fact.data.datasource.web.models.response.GobFactsResponse
 import com.example.gob_fact.data.datasource.web.repository.FactMapper.mapResponseToEntities
-import com.example.gob_fact.domain.IFactRepository
+import com.example.gob_fact.domain.repository.IFactRepository
 import com.example.gob_fact.domain.NetworkBoundResource
 import com.example.gob_fact.sys.util.AppExecutors
 import com.example.gob_fact.sys.util.Resource

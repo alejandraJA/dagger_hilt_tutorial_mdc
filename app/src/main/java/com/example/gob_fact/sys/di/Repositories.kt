@@ -3,7 +3,7 @@ package com.example.gob_fact.sys.di
 import com.example.gob_fact.data.datasource.database.dao.FactDao
 import com.example.gob_fact.data.datasource.web.api.FactService
 import com.example.gob_fact.data.datasource.web.repository.FactRepository
-import com.example.gob_fact.domain.IFactRepository
+import com.example.gob_fact.domain.repository.IFactRepository
 import com.example.gob_fact.sys.util.AppExecutors
 import dagger.Module
 import dagger.Provides

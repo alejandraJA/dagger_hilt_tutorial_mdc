@@ -1,4 +1,4 @@
-package com.example.gob_fact.domain
+package com.example.gob_fact.domain.repository
 
 import androidx.lifecycle.LiveData
 import com.example.gob_fact.data.datasource.database.entities.FactEntity

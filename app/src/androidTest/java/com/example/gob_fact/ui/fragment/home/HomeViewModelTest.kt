@@ -1,4 +1,4 @@
-package com.example.gob_fact.ui.fragment.main
+package com.example.gob_fact.ui.fragment.home
 
 import androidx.lifecycle.viewModelScope
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
@@ -6,15 +6,16 @@ import com.example.gob_fact.data.datasource.web.repository.FactRepository
 import com.example.gob_fact.fake.FakeFactDao
 import com.example.gob_fact.fake.FakeFactService
 import com.example.gob_fact.sys.util.AppExecutors
+import com.example.gob_fact.ui.main.home.HomeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.junit.Before
 import org.junit.Test
 
-class MainViewModelTest {
+class HomeViewModelTest {
 
-    private lateinit var mainViewModel: MainViewModel
+    private lateinit var homeViewModel: HomeViewModel
     private lateinit var factRepository: FactRepository
     private lateinit var fakeFactDao: FakeFactDao
     private lateinit var fakeFactService: FakeFactService
@@ -26,7 +27,7 @@ class MainViewModelTest {
         fakeFactService = FakeFactService()
         expectedFact = AppExecutors()
         factRepository = FactRepository(fakeFactDao, fakeFactService, expectedFact)
-        mainViewModel = MainViewModel(factRepository)
+        homeViewModel = HomeViewModel(factRepository)
     }
 
     @Test
@@ -47,9 +48,9 @@ class MainViewModelTest {
             )
         )
 
-        mainViewModel.viewModelScope.launch {
+        homeViewModel.viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                mainViewModel.facts.observeForever {
+                homeViewModel.facts.observeForever {
                     assert(it.isNotEmpty())
                 }
             }
@@ -89,10 +90,10 @@ class MainViewModelTest {
             )
         )
 
-        mainViewModel.loadMoreFacts("query")
-        mainViewModel.viewModelScope.launch {
+        homeViewModel.loadMoreFacts("query")
+        homeViewModel.viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                mainViewModel.facts.observeForever {
+                homeViewModel.facts.observeForever {
                     assert(it.isNotEmpty())
                 }
             }
@@ -132,11 +133,11 @@ class MainViewModelTest {
             )
         )
 
-        mainViewModel.searchFacts("query")
+        homeViewModel.searchFacts("query")
 
-        mainViewModel.viewModelScope.launch {
+        homeViewModel.viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                mainViewModel.facts.observeForever {
+                homeViewModel.facts.observeForever {
                     assert(it.isNotEmpty())
                 }
             }

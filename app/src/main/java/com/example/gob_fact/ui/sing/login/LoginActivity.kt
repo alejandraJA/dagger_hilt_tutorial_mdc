@@ -1,4 +1,4 @@
-package com.example.gob_fact.ui.activity.login
+package com.example.gob_fact.ui.sing.login
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -11,8 +11,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.gob_fact.databinding.ActivityLoginBinding
 import com.example.gob_fact.sys.util.UtilsText.isNotBlank
-import com.example.gob_fact.ui.activity.main.MainActivity
-import com.example.gob_fact.ui.activity.singup.SingInActivity
+import com.example.gob_fact.ui.main.MainActivity
+import com.example.gob_fact.ui.sing.singup.SingInActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint

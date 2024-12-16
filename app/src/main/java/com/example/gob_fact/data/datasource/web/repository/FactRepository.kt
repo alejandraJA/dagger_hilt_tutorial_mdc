@@ -1,7 +1,6 @@
 package com.example.gob_fact.data.datasource.web.repository
 
 import androidx.lifecycle.LiveData
-import androidx.paging.PagingSource
 import com.example.gob_fact.data.datasource.database.dao.FactDao
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
 import com.example.gob_fact.data.datasource.web.api.FactService
@@ -10,7 +9,6 @@ import com.example.gob_fact.data.datasource.web.models.response.GobFactsResponse
 import com.example.gob_fact.domain.IFactRepository
 import com.example.gob_fact.domain.NetworkBoundResource
 import com.example.gob_fact.sys.util.AppExecutors
-import com.example.gob_fact.sys.util.Constants
 import com.example.gob_fact.sys.util.Resource
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -40,13 +38,15 @@ class FactRepository @Inject constructor(
                             slug = it.slug,
                             url = it.url
                         )
+                        // Checar  lo del mapper
                     )
                 }
             }
 
             override fun shouldFetch(data: List<FactEntity>?): Boolean =
                 data!!.isEmpty()
-
+            // Paginado desde el consumo de la api
+            // Checar como implemenrtar el flow
 
             override fun loadFromDb(): LiveData<List<FactEntity>> =
                 dao.getFacts()

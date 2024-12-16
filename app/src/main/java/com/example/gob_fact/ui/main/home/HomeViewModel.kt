@@ -1,6 +1,5 @@
-package com.example.gob_fact.ui.fragment.main
+package com.example.gob_fact.ui.main.home
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,7 +12,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class HomeViewModel @Inject constructor(
     private val factRepository: FactRepository
 ) : ViewModel() {
 

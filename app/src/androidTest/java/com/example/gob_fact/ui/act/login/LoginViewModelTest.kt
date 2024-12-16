@@ -1,8 +1,9 @@
-package com.example.gob_fact.ui.activity.login
+package com.example.gob_fact.ui.act.login
 
 import com.example.gob_fact.domain.StorageRepository
 import com.example.gob_fact.fake.FakeStorage
 import com.example.gob_fact.sys.util.Constants
+import com.example.gob_fact.ui.sing.login.LoginViewModel
 import org.junit.Assert.*
 
 import org.junit.Before

@@ -1,16 +1,15 @@
-package com.example.gob_fact.ui.fragment.main
+package com.example.gob_fact.ui.main.home
 
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import androidx.fragment.app.viewModels
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,21 +17,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.gob_fact.R
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
 import com.example.gob_fact.databinding.FragmentMainBinding
-import com.example.gob_fact.ui.fragment.fact.FactFragment.Companion.LOCATION_PERMISSION_REQUEST_CODE
-import com.example.gob_fact.ui.fragment.main.adapter.FactAdapter
+import com.example.gob_fact.ui.main.fact.FactFragment.Companion.LOCATION_PERMISSION_REQUEST_CODE
+import com.example.gob_fact.ui.main.home.adapter.FactAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainFragment : Fragment() {
+class HomeFragment : Fragment() {
 
-    lateinit var viewModel: MainViewModel
+    lateinit var viewModel: HomeViewModel
     lateinit var binding: FragmentMainBinding
     private val facts = mutableListOf<FactEntity>()
     lateinit var adapter: FactAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         if (!checkLocationPermissions())
             requestLocationPermissions()
     }

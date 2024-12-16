@@ -1,4 +1,4 @@
-package com.example.gob_fact.ui.fragment.main.adapter
+package com.example.gob_fact.ui.main.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

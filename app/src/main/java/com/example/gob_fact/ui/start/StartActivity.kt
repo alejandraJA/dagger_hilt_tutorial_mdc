@@ -1,4 +1,4 @@
-package com.example.gob_fact.ui.activity.start
+package com.example.gob_fact.ui.start
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -14,8 +14,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.gob_fact.R
 import com.example.gob_fact.databinding.ActivityStartBinding
-import com.example.gob_fact.ui.activity.login.LoginActivity
-import com.example.gob_fact.ui.fragment.fact.FactFragment.Companion.LOCATION_PERMISSION_REQUEST_CODE
+import com.example.gob_fact.ui.sing.login.LoginActivity
+import com.example.gob_fact.ui.main.fact.FactFragment.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

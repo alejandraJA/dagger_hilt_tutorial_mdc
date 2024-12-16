@@ -1,10 +1,11 @@
-package com.example.gob_fact.ui.activity.singup
+package com.example.gob_fact.ui.act.singup
 
 import com.example.gob_fact.domain.StorageRepository
 import com.example.gob_fact.fake.FakeStorage
 import com.example.gob_fact.sys.util.Constants.BIOMETRIC
 import com.example.gob_fact.sys.util.Constants.PASSWORD
 import com.example.gob_fact.sys.util.Constants.REGISTERED_USER
+import com.example.gob_fact.ui.sing.singup.SingInViewModel
 import org.junit.Assert.*
 
 import org.junit.Before

@@ -5,6 +5,7 @@ import com.example.gob_fact.data.datasource.web.repository.FactRepository
 import com.example.gob_fact.fake.FakeFactDao
 import com.example.gob_fact.fake.FakeFactService
 import com.example.gob_fact.sys.util.AppExecutors
+import com.example.gob_fact.ui.main.fact.FactViewModel
 import org.junit.Assert.*
 
 import org.junit.Before

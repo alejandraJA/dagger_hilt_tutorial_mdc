@@ -1,4 +1,4 @@
-package com.example.gob_fact.ui.activity.singup
+package com.example.gob_fact.ui.sing.singup
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -18,7 +18,7 @@ import com.example.gob_fact.R
 import com.example.gob_fact.databinding.ActivitySingInBinding
 import com.example.gob_fact.domain.GoogleAuthenticator
 import com.example.gob_fact.sys.util.UtilsText.isNotBlank
-import com.example.gob_fact.ui.activity.main.MainActivity
+import com.example.gob_fact.ui.main.MainActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -30,7 +30,7 @@ import java.util.UUID
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SingInActivity : AppCompatActivity() {
+class SingInActivity : AppCompatActivity() { // add firebase
 
     lateinit var binding: ActivitySingInBinding
     private lateinit var biometricPrompt: BiometricPrompt

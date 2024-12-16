@@ -1,10 +1,11 @@
-package com.example.gob_fact.ui.activity.start
+package com.example.gob_fact.ui.act.start
 
 import androidx.lifecycle.viewModelScope
 import com.example.gob_fact.data.datasource.web.repository.FactRepository
 import com.example.gob_fact.fake.FakeFactDao
 import com.example.gob_fact.fake.FakeFactService
 import com.example.gob_fact.sys.util.AppExecutors
+import com.example.gob_fact.ui.start.StartViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

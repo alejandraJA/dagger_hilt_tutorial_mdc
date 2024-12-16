@@ -1,4 +1,4 @@
-package com.example.gob_fact.ui.fragment.fact
+package com.example.gob_fact.ui.main.fact
 
 import android.Manifest
 import android.content.ClipData
@@ -21,7 +21,6 @@ import com.example.gob_fact.R
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
 import com.example.gob_fact.databinding.FragmentFactBinding
 import com.google.android.gms.location.LocationServices
-import com.google.android.material.color.MaterialColors.getColor
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 

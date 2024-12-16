@@ -1,4 +1,4 @@
-package com.example.gob_fact.ui.fragment.fact
+package com.example.gob_fact.ui.main.fact
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -31,3 +31,5 @@ class FactViewModel @Inject constructor(
     }
 
 }
+
+// Deshacer filtrado al volver o algo asi

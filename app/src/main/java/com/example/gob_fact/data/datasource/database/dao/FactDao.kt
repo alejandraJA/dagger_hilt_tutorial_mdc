@@ -1,13 +1,11 @@
 package com.example.gob_fact.data.datasource.database.dao
 
-import androidx.room.Dao
-import androidx.room.OnConflictStrategy
 import androidx.lifecycle.LiveData
-import androidx.paging.PagingSource
+import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
-import com.example.gob_fact.data.datasource.web.models.Pagination
 
 @Dao
 interface FactDao {
@@ -45,4 +43,7 @@ interface FactDao {
         LIMIT :pageSize OFFSET :offset
     """)
     fun getFactsPaginated(pageSize: Int, offset: Int): List<FactEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertFacts(facts: List<FactEntity>)
 }

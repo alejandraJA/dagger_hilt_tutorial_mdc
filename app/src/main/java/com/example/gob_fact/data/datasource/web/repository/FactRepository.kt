@@ -6,6 +6,7 @@ import com.example.gob_fact.data.datasource.database.entities.FactEntity
 import com.example.gob_fact.data.datasource.web.api.FactService
 import com.example.gob_fact.data.datasource.web.models.response.ApiResponse
 import com.example.gob_fact.data.datasource.web.models.response.GobFactsResponse
+import com.example.gob_fact.data.datasource.web.repository.FactMapper.mapResponseToEntities
 import com.example.gob_fact.domain.IFactRepository
 import com.example.gob_fact.domain.NetworkBoundResource
 import com.example.gob_fact.sys.util.AppExecutors
@@ -22,26 +23,8 @@ class FactRepository @Inject constructor(
 
     override fun loadFacts(): LiveData<Resource<List<FactEntity>>> =
         object : NetworkBoundResource<List<FactEntity>, GobFactsResponse>(appExecutor) {
-            override fun saveCallResult(response: GobFactsResponse) {
-                response.facts.forEach {
-                    dao.setFact(
-                        FactEntity(
-                            id = it.id,
-                            columns = it.columns,
-                            createdAt = it.createdAt,
-                            dataset = it.dataset,
-                            dateInsert = it.dateInsert,
-                            fact = it.fact,
-                            operations = it.operations,
-                            organization = it.organization,
-                            resource = it.resource,
-                            slug = it.slug,
-                            url = it.url
-                        )
-                        // Checar  lo del mapper
-                    )
-                }
-            }
+            override fun saveCallResult(response: GobFactsResponse) =
+                dao.insertFacts(mapResponseToEntities(response))
 
             override fun shouldFetch(data: List<FactEntity>?): Boolean =
                 data!!.isEmpty()
@@ -59,8 +42,12 @@ class FactRepository @Inject constructor(
     override fun deleteFacts() = dao.deleteFacts()
 
     override fun getFacts(): LiveData<List<FactEntity>> = dao.getFacts()
-    override fun getFactsPaginated(pageSize: Int, offset: Int): List<FactEntity> = dao.getFactsPaginated(pageSize, offset)
-    override fun searchFactPaginated(query: String, pageSize: Int, offset: Int): List<FactEntity> = dao.searchFactPaginated(query, pageSize, offset)
+    override fun getFactsPaginated(pageSize: Int, offset: Int): List<FactEntity> =
+        dao.getFactsPaginated(pageSize, offset)
+
+    override fun searchFactPaginated(query: String, pageSize: Int, offset: Int): List<FactEntity> =
+        dao.searchFactPaginated(query, pageSize, offset)
+
     override fun getFact(factId: String): LiveData<FactEntity?> = dao.getFact(factId)
     override fun searchFact(query: String): LiveData<List<FactEntity>> = dao.searchFact(query)
 

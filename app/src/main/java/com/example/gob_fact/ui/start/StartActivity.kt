@@ -11,12 +11,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.gob_fact.R
 import com.example.gob_fact.databinding.ActivityStartBinding
-import com.example.gob_fact.ui.sing.login.LoginActivity
 import com.example.gob_fact.ui.main.fact.FactFragment.Companion.LOCATION_PERMISSION_REQUEST_CODE
+import com.example.gob_fact.ui.sing.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class StartActivity : AppCompatActivity() {
@@ -45,15 +49,18 @@ class StartActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        viewModel.facts.observe(this) {
-            if (it != null) {
-                if (checkLocationPermissions())
-                    navigateToLoginActivity()
-                else
-                    requestLocationPermissions()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.facts.collect {
+                    if (checkLocationPermissions())
+                        navigateToLoginActivity()
+                    else
+                        requestLocationPermissions()
+                }
             }
         }
     }
+
 
     private fun checkLocationPermissions(): Boolean =
         ActivityCompat.checkSelfPermission(

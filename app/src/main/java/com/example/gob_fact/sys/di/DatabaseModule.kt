@@ -10,7 +10,6 @@ import androidx.room.Room
 import com.example.gob_fact.data.datasource.database.dao.FactDao
 import com.example.gob_fact.data.datasource.storage.IStorage
 import com.example.gob_fact.data.datasource.storage.Storage
-import com.example.gob_fact.data.datasource.web.repository.FactRepository
 import dagger.Module
 import dagger.Provides
 

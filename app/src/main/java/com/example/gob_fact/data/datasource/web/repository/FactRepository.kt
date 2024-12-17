@@ -1,16 +1,18 @@
 package com.example.gob_fact.data.datasource.web.repository
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asFlow
 import com.example.gob_fact.data.datasource.database.dao.FactDao
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
 import com.example.gob_fact.data.datasource.web.api.FactService
 import com.example.gob_fact.data.datasource.web.models.response.ApiResponse
 import com.example.gob_fact.data.datasource.web.models.response.GobFactsResponse
-import com.example.gob_fact.data.datasource.web.repository.FactMapper.mapResponseToEntities
+import com.example.gob_fact.data.datasource.web.repository.FactMapper.mapGobFactsResponseToEntities
 import com.example.gob_fact.domain.repository.IFactRepository
-import com.example.gob_fact.domain.NetworkBoundResource
+import com.example.gob_fact.domain.NetworkBoundResourceWithFlow
 import com.example.gob_fact.sys.util.AppExecutors
 import com.example.gob_fact.sys.util.Resource
+import kotlinx.coroutines.flow.Flow
 
 class FactRepository (
     private val dao: FactDao,
@@ -18,23 +20,21 @@ class FactRepository (
     private val appExecutor: AppExecutors
 ) : IFactRepository {
 
-    override fun loadFacts(): LiveData<Resource<List<FactEntity>>> =
-        object : NetworkBoundResource<List<FactEntity>, GobFactsResponse>(appExecutor) {
+    override fun loadFacts(): Flow<Resource<List<FactEntity>>> =
+        object : NetworkBoundResourceWithFlow<List<FactEntity>, GobFactsResponse>(appExecutor) {
             override fun saveCallResult(response: GobFactsResponse) =
-                dao.insertFacts(mapResponseToEntities(response))
+                dao.insertFacts(mapGobFactsResponseToEntities(response))
 
             override fun shouldFetch(data: List<FactEntity>?): Boolean =
                 data!!.isEmpty()
-            // Paginado desde el consumo de la api
-            // Checar como implemenrtar el flow
 
-            override fun loadFromDb(): LiveData<List<FactEntity>> =
-                dao.getFacts()
+            override fun loadFromDb(): Flow<List<FactEntity>> =
+                dao.getFactsFlow()
 
-            override fun createCall(): LiveData<ApiResponse<GobFactsResponse>> =
-                service.loadFacts()
+            override fun createCall(): Flow<ApiResponse<GobFactsResponse>> =
+                service.loadFacts().asFlow()
 
-        }.asLiveData()
+        }.asFlow()
 
     override fun deleteFacts() = dao.deleteFacts()
 

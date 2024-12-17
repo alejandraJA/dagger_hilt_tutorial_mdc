@@ -4,7 +4,7 @@ import com.example.gob_fact.data.datasource.database.entities.FactEntity
 import com.example.gob_fact.data.datasource.web.models.response.GobFactsResponse
 
 object FactMapper {
-    fun mapResponseToEntities(response: GobFactsResponse): List<FactEntity> {
+    fun mapGobFactsResponseToEntities(response: GobFactsResponse): List<FactEntity> {
         return response.facts.map {
             FactEntity(
                 id = it.id,

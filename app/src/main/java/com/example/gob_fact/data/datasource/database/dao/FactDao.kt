@@ -6,12 +6,17 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FactDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun setFact(factEntity: FactEntity)
+
+    @Query("SELECT * FROM fact")
+    fun getFactsFlow(): Flow<List<FactEntity>>
+
 
     @Query("SELECT * FROM fact")
     fun getFacts(): LiveData<List<FactEntity>>

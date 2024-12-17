@@ -21,6 +21,11 @@ object Repositories {
         dao: FactDao,
         service: FactService,
         appExecutor: AppExecutors
-    ): IFactRepository = FactRepository(dao, service, appExecutor)
+    ): IFactRepository =
+        FactRepository(
+            dao,
+            service,
+            appExecutor
+        )
 
 }

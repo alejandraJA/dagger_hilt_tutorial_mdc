@@ -108,6 +108,7 @@ android {
         ksp 'com.google.dagger:dagger-compiler:2.50'
 
         // Room
+        implementation "androidx.room:room-ktx:2.6.1"
         implementation "androidx.room:room-runtime:2.6.1"
         ksp "androidx.room:room-compiler:2.6.1"
 
@@ -132,6 +133,8 @@ android {
         implementation "androidx.fragment:fragment-ktx:1.8.5"
         implementation "androidx.activity:activity-ktx:1.9.3"
         implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.7'
+        implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
+        implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3"
 
         // timber
         implementation 'com.jakewharton.timber:timber:4.7.1'

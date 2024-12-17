@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import com.example.gob_fact.data.datasource.database.dao.FactDao
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
 
-@Database(entities = [FactEntity::class], version = 1, exportSchema = true)
+@Database(entities = [FactEntity::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun factDao(): FactDao
 }

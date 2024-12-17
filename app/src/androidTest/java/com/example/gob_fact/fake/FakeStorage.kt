@@ -2,7 +2,7 @@ package com.example.gob_fact.fake
 
 import com.example.gob_fact.data.datasource.storage.IStorage
 
-class FakeStorage() : IStorage {
+class FakeStorage : IStorage {
 
     private var fakeSharedPreferences: MutableList<Map<String, Any>> = mutableListOf()
 

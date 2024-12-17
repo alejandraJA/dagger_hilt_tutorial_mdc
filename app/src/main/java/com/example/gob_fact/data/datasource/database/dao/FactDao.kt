@@ -1,6 +1,5 @@
 package com.example.gob_fact.data.datasource.database.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -15,11 +14,7 @@ interface FactDao {
     fun setFact(factEntity: FactEntity)
 
     @Query("SELECT * FROM fact")
-    fun getFactsFlow(): Flow<List<FactEntity>>
-
-
-    @Query("SELECT * FROM fact")
-    fun getFacts(): LiveData<List<FactEntity>>
+    fun getFacts(): Flow<List<FactEntity>>
 
     @Query("DELETE FROM fact")
     fun deleteFacts()
@@ -30,7 +25,7 @@ interface FactDao {
         WHERE id == :factId 
         ORDER BY fact ASC
         """)
-    fun getFact(factId: String): LiveData<FactEntity?>
+    fun getFact(factId: String): Flow<FactEntity?>
 
     @Query("""
         SELECT * 
@@ -38,7 +33,7 @@ interface FactDao {
         WHERE organization LIKE '%' || :query || '%'
         ORDER BY fact ASC
         """)
-    fun searchFact(query: String): LiveData<List<FactEntity>>
+    fun searchFact(query: String): Flow<List<FactEntity>>
 
     @Query("""
         SELECT * 

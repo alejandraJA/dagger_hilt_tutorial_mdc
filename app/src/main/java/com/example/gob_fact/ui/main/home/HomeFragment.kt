@@ -11,6 +11,7 @@ import android.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.gob_fact.R
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
@@ -18,6 +19,7 @@ import com.example.gob_fact.databinding.FragmentMainBinding
 import com.example.gob_fact.ui.main.fact.FactFragment.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import com.example.gob_fact.ui.main.home.adapter.FactAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -100,16 +102,18 @@ class HomeFragment : Fragment() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun setObservers() {
-        viewModel.facts.observe(viewLifecycleOwner) {
-            if (it.isEmpty()) {
-                binding.recyclerFact.visibility = View.GONE
-                binding.noDataLayout.visibility = View.VISIBLE
-            } else {
-                adapter.addFacts(it)
-                adapter.setLoading(false)
-                adapter.notifyDataSetChanged()
-                binding.recyclerFact.visibility = View.VISIBLE
-                binding.noDataLayout.visibility = View.GONE
+        lifecycleScope.launch {
+            viewModel.facts.collect { facts ->
+                if (facts.isEmpty()) {
+                    binding.recyclerFact.visibility = View.GONE
+                    binding.noDataLayout.visibility = View.VISIBLE
+                } else {
+                    adapter.addFacts(facts)
+                    adapter.setLoading(false)
+                    adapter.notifyDataSetChanged()
+                    binding.recyclerFact.visibility = View.VISIBLE
+                    binding.noDataLayout.visibility = View.GONE
+                }
             }
         }
     }

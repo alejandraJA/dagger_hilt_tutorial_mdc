@@ -20,13 +20,11 @@ class StartViewModel @Inject constructor(
         MutableStateFlow<List<FactEntity>>(emptyList()).apply {
             viewModelScope.launch {
                 loadFactsUseCase().let { factsResource ->
-                    factsResource.let {
-                        factsResource.collect { facts ->
-                            if (facts.status == Constants.StatusResponse.SUCCESS)
-                                value = facts.data ?: emptyList()
-                            if (facts.status == Constants.StatusResponse.ERROR)
-                                value = emptyList()
-                        }
+                    factsResource.collect { facts ->
+                        if (facts.status == Constants.StatusResponse.SUCCESS)
+                            value = facts.data ?: emptyList()
+                        if (facts.status == Constants.StatusResponse.ERROR)
+                            value = emptyList()
                     }
                 }
             }

@@ -17,12 +17,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.gob_fact.R
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
 import com.example.gob_fact.databinding.FragmentFactBinding
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class FactFragment : Fragment() {
@@ -60,16 +62,19 @@ class FactFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.fact.observe(viewLifecycleOwner) {
-            it?.let { fact ->
-                binding.fact = fact
+        lifecycleScope.launch {
+            viewModel.fact.collect { fact ->
+                fact?.let {
+                    binding.fact = fact
+                }
             }
         }
         viewModel.loadFact()
     }
 
     private fun initRequestLocation() {
-        val locationManager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager =
+            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val locationListener = LocationListener { location ->
             latitude = location.latitude
             longitude = location.longitude
@@ -100,7 +105,10 @@ class FactFragment : Fragment() {
         binding.buttonShareWhatsApp.visibility = View.GONE
     }
 
-    private fun requestLocationUpdates(locationManager: LocationManager, locationListener: LocationListener) {
+    private fun requestLocationUpdates(
+        locationManager: LocationManager,
+        locationListener: LocationListener
+    ) {
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
@@ -130,18 +138,30 @@ class FactFragment : Fragment() {
 
     private fun setOnClickListeners() {
         binding.buttonOpenUrl.setOnClickListener {
-            viewModel.fact.value?.let { fact ->
-                openUrl(fact.url)
+            lifecycleScope.launch {
+                viewModel.fact.collect {
+                    it?.let { fact ->
+                        openUrl(fact.url)
+                    }
+                }
             }
         }
         binding.buttonCopyUrl.setOnClickListener {
-            viewModel.fact.value?.let { fact ->
-                copyToClipboard(fact.url)
+            lifecycleScope.launch {
+                viewModel.fact.collect {
+                    it?.let { fact ->
+                        copyToClipboard(fact.url)
+                    }
+                }
             }
         }
         binding.buttonShareWhatsApp.setOnClickListener {
-            viewModel.fact.value?.let { fact ->
-                shareOnWhatsApp(fact)
+            lifecycleScope.launch {
+                viewModel.fact.collect {
+                    it?.let { fact ->
+                        shareOnWhatsApp(fact)
+                    }
+                }
             }
         }
     }
@@ -152,7 +172,8 @@ class FactFragment : Fragment() {
     }
 
     private fun copyToClipboard(url: String) {
-        val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipboard =
+            requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("URL", url)
         clipboard.setPrimaryClip(clip)
     }
@@ -179,8 +200,8 @@ class FactFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun showSnackBar(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
+    private fun showSnackBar(text: String) {
+        Snackbar.make(binding.root, text, Snackbar.LENGTH_LONG).show()
     }
 
     companion object {

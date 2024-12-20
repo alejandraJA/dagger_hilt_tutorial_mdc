@@ -1,6 +1,9 @@
 package com.example.gob_fact.data.datasource.web.repository
 
 import androidx.lifecycle.asFlow
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.example.gob_fact.data.datasource.database.dao.FactDao
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
 import com.example.gob_fact.data.datasource.web.api.FactService
@@ -13,11 +16,27 @@ import com.example.gob_fact.sys.util.AppExecutors
 import com.example.gob_fact.sys.util.Resource
 import kotlinx.coroutines.flow.Flow
 
-class FactRepository (
+class FactRepository(
     private val dao: FactDao,
     private val service: FactService,
     private val appExecutor: AppExecutors
 ) : IFactRepository {
+
+    override fun loadFacts(loadSize: Int, i1: Int): Flow<Resource<List<FactEntity>>> =
+        object : NetworkBoundResourceWithFlow<List<FactEntity>, GobFactsResponse>(appExecutor) {
+            override fun saveCallResult(response: GobFactsResponse) =
+                dao.insertFacts(mapGobFactsResponseToEntities(response))
+
+            override fun shouldFetch(data: List<FactEntity>?): Boolean =
+                true
+
+            override fun loadFromDb(): Flow<List<FactEntity>> =
+                dao.getFacts()
+
+            override fun createCall(): Flow<ApiResponse<GobFactsResponse>> =
+                service.loadFacts(i1, loadSize).asFlow()
+
+        }.asFlow()
 
     override fun loadFacts(): Flow<Resource<List<FactEntity>>> =
         object : NetworkBoundResourceWithFlow<List<FactEntity>, GobFactsResponse>(appExecutor) {
@@ -25,7 +44,7 @@ class FactRepository (
                 dao.insertFacts(mapGobFactsResponseToEntities(response))
 
             override fun shouldFetch(data: List<FactEntity>?): Boolean =
-                data!!.isEmpty()
+                true
 
             override fun loadFromDb(): Flow<List<FactEntity>> =
                 dao.getFacts()
@@ -47,4 +66,12 @@ class FactRepository (
     override fun getFact(factId: String): Flow<FactEntity?> = dao.getFact(factId)
     override fun searchFact(query: String): Flow<List<FactEntity>> = dao.searchFact(query)
 
+    override fun loadFactsPaging(): Flow<PagingData<FactEntity>> {
+        return Pager(
+            config = PagingConfig(pageSize = 10, enablePlaceholders = false),
+            pagingSourceFactory = { FactPagingSource(this, dao) }
+        ).flow
+    }
+
 }
+

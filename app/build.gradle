@@ -164,9 +164,8 @@ android {
         implementation "com.google.android.libraries.identity.googleid:googleid:1.1.1"
         implementation 'com.google.android.gms:play-services-auth:20.7.0'
 
-        def paging_version = "3.1.1"
-        implementation "androidx.paging:paging-runtime-ktx:$paging_version"
-        implementation "androidx.paging:paging-rxjava2-ktx:$paging_version"
+        implementation "androidx.paging:paging-runtime-ktx:3.3.5"
+        implementation "androidx.paging:paging-rxjava2-ktx:3.3.5"
     }
     namespace 'com.example.gob_fact'
     buildFeatures {

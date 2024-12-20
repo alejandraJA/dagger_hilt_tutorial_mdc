@@ -16,6 +16,9 @@ interface FactDao {
     @Query("SELECT * FROM fact")
     fun getFacts(): Flow<List<FactEntity>>
 
+    @Query("SELECT * FROM fact")
+    fun getAllFacts(): List<FactEntity>?
+
     @Query("DELETE FROM fact")
     fun deleteFacts()
 

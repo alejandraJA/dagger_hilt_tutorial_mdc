@@ -56,7 +56,7 @@ class FactRepositoryTest {
     @Test
     fun `loadFacts with empty database should fetch from network`() {
         // Act
-        factRepository.loadFacts()
+        factRepository.loadFacts(params.loadSize, (nextPage - 1) * params.loadSize)
 
         // Assert
         assert(fakeFactService.loadFacts().value is ApiSuccessResponse)

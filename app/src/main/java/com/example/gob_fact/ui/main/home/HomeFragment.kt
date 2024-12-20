@@ -10,16 +10,21 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.PagingData
 import com.example.gob_fact.R
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
 import com.example.gob_fact.databinding.FragmentMainBinding
 import com.example.gob_fact.ui.main.fact.FactFragment.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import com.example.gob_fact.ui.main.home.adapter.FactAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -27,7 +32,7 @@ class HomeFragment : Fragment() {
     lateinit var viewModel: HomeViewModel
     lateinit var binding: FragmentMainBinding
     private val facts = mutableListOf<FactEntity>()
-    lateinit var adapter: FactAdapter
+    private lateinit var adapter: FactAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,17 +75,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun initSearchFact() {
-        viewModel.searchFacts(null)
         binding.searchFactsView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                viewModel.searchFacts(query)
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 newText?.let {
-                    adapter.clear()
-                    viewModel.searchFacts(it)
+
                 }
                 return true
             }
@@ -88,7 +90,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initRecycler() {
-        adapter = FactAdapter(facts, factInterface = { position ->
+        adapter = FactAdapter(factInterface = { position ->
             val fact = facts[position]
             val bundle = Bundle().apply {
                 putString("fact_id", fact.id)
@@ -96,24 +98,23 @@ class HomeFragment : Fragment() {
             findNavController().navigate(
                 R.id.action_mainFragment_to_fragment_fact, bundle
             )
-        }, loadMoreFacts = {})
+        })
         binding.recyclerFact.adapter = adapter
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun setObservers() {
         lifecycleScope.launch {
-            viewModel.facts.collect { facts ->
-                if (facts.isEmpty()) {
-                    binding.recyclerFact.visibility = View.GONE
-                    binding.noDataLayout.visibility = View.VISIBLE
-                } else {
-                    adapter.addFacts(facts)
-                    adapter.setLoading(false)
-                    adapter.notifyDataSetChanged()
-                    binding.recyclerFact.visibility = View.VISIBLE
-                    binding.noDataLayout.visibility = View.GONE
-                }
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.facts
+                    .catch {
+                        adapter.submitData(PagingData.empty())
+                        adapter.notifyDataSetChanged()
+                        Timber.tag("HomeFragment").e("Error: ${it.message}")
+                    }
+                    .collect { pagingData ->
+                        adapter.submitData(pagingData)
+                    }
             }
         }
     }

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.room.util.query
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
 import com.example.gob_fact.domain.usecase.CountFactsUseCase
 import com.example.gob_fact.domain.usecase.LoadFactsPagingUseCase
@@ -34,9 +35,5 @@ class HomeViewModel @Inject constructor(
         }.cachedIn(viewModelScope)
     val facts: Flow<PagingData<FactEntity>>
         get() = _facts
-
-    private val _isEmptyFacts: Flow<Int> = countFactsUseCase()
-    val isEmptyFacts: Flow<Int>
-        get() = _isEmptyFacts
 
 }

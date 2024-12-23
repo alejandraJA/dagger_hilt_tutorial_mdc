@@ -10,5 +10,5 @@ interface IFactRepository {
     fun loadFacts(): Flow<Resource<List<FactEntity>>>
     fun getFact(factId: String): Flow<FactEntity?>
     fun loadFactsPaging(organization: String): Flow<PagingData<FactEntity>>
-    fun countFacts(): Flow<Int>
+    fun countFacts(organization: String): Flow<Int>
 }

@@ -24,9 +24,10 @@ class FactPagingSource(
                 service.loadFacts(10, page)
 
                 val facts: MutableList<FactEntity> = mutableListOf()
-                dao.getAllFacts(organization)?.let { facts.addAll(it) }
-                if (facts.isEmpty())
+                if (organization.isEmpty())
                     dao.getAllFacts()?.let { facts.addAll(it) }
+                else
+                    dao.getAllFacts(organization)?.let { facts.addAll(it) }
                 isNextKey = facts.isEmpty()
 
                 LoadResult.Page(

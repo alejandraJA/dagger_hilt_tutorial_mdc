@@ -15,6 +15,7 @@ import com.example.gob_fact.domain.repository.IFactRepository
 import com.example.gob_fact.sys.util.AppExecutors
 import com.example.gob_fact.sys.util.Resource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class FactRepository(
     private val dao: FactDao,
@@ -25,7 +26,7 @@ class FactRepository(
     override fun loadFacts(loadSize: Int, page: Int): Flow<Resource<List<FactEntity>>> =
         object : NetworkBoundResourceWithFlow<List<FactEntity>, GobFactsResponse>(appExecutor) {
             override fun saveCallResult(response: GobFactsResponse) {
-                if(response.facts.isNotEmpty()) {
+                if (response.facts.isNotEmpty()) {
                     dao.clear()
                     dao.insertFacts(mapGobFactsResponseToEntities(response))
                 }
@@ -67,7 +68,11 @@ class FactRepository(
         ).flow
     }
 
-    override fun countFacts(): Flow<Int> = dao.countFacts()
+    override fun countFacts(organization: String): Flow<Int> {
+        val facts = if (organization.isEmpty()) dao.getAllFacts()
+        else dao.getAllFacts(organization)
+        return flow { emit(facts!!.size) }
+    }
 
 }
 

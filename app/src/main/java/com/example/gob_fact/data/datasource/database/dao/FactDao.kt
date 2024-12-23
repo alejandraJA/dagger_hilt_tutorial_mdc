@@ -34,8 +34,12 @@ interface FactDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertFacts(facts: List<FactEntity>)
 
-    @Query("SELECT COUNT(fact) from fact")
-    fun countFacts(): Flow<Int>
+    @Query("""
+        SELECT COUNT(fact) 
+        FROM fact
+        WHERE organization LIKE '%' || :organization || '%'
+        """)
+    fun countFacts(organization: String): Flow<Int>
     @Query("DELETE FROM fact")
     fun clear()
 

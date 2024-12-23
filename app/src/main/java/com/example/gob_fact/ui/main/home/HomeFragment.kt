@@ -106,13 +106,12 @@ class HomeFragment : Fragment() {
                 viewModel.facts.catch {
                     adapter.submitData(PagingData.empty())
                     adapter.notifyDataSetChanged()
+                    binding.noDataLayout.visibility = View.VISIBLE
                     Timber.tag("HomeFragment").e("Error: ${it.message}")
-                }.collect { pagingData ->
+                }.collectLatest { pagingData ->
                     adapter.submitData(pagingData)
-                }
-                viewModel.isEmptyFacts.collectLatest { count ->
-                    if (count != 0) binding.noDataLayout.visibility = View.VISIBLE
-                    else binding.noDataLayout.visibility = View.GONE
+                    if (adapter.itemCount > 0) binding.noDataLayout.visibility = View.GONE
+                    else binding.noDataLayout.visibility = View.VISIBLE
                 }
             }
         }

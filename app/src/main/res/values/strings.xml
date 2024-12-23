@@ -17,4 +17,5 @@
     <string name="or">or</string>
     <string name="fingerprint">Use fingerprint</string>
     <string name="no_data">Nothing to show</string>
+    <string name="offline">Offline mode</string>
 </resources>

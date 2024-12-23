@@ -8,5 +8,5 @@ import javax.inject.Singleton
 class CountFactsUseCase @Inject constructor(
     private val factRepository: IFactRepository
 ) {
-    operator fun invoke() = factRepository.countFacts()
+    operator fun invoke(organization: String) = factRepository.countFacts(organization)
 }

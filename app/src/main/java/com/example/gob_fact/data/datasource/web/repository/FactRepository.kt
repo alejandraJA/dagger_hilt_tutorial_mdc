@@ -22,10 +22,14 @@ class FactRepository(
     private val appExecutor: AppExecutors
 ) : IFactRepository {
 
-    override fun loadFacts(loadSize: Int, i1: Int): Flow<Resource<List<FactEntity>>> =
+    override fun loadFacts(loadSize: Int, page: Int): Flow<Resource<List<FactEntity>>> =
         object : NetworkBoundResourceWithFlow<List<FactEntity>, GobFactsResponse>(appExecutor) {
-            override fun saveCallResult(response: GobFactsResponse) =
-                dao.insertFacts(mapGobFactsResponseToEntities(response))
+            override fun saveCallResult(response: GobFactsResponse) {
+                if(response.facts.isNotEmpty()) {
+                    dao.clear()
+                    dao.insertFacts(mapGobFactsResponseToEntities(response))
+                }
+            }
 
             override fun shouldFetch(data: List<FactEntity>?): Boolean =
                 true
@@ -34,7 +38,7 @@ class FactRepository(
                 dao.getFacts()
 
             override fun createCall(): Flow<ApiResponse<GobFactsResponse>> =
-                service.loadFacts(i1, loadSize).asFlow()
+                service.loadFacts(page, loadSize).asFlow()
 
         }.asFlow()
 
@@ -54,24 +58,16 @@ class FactRepository(
 
         }.asFlow()
 
-    override fun deleteFacts() = dao.deleteFacts()
-
-    override fun getFacts(): Flow<List<FactEntity>> = dao.getFacts()
-    override fun getFactsPaginated(pageSize: Int, offset: Int): List<FactEntity> =
-        dao.getFactsPaginated(pageSize, offset)
-
-    override fun searchFactPaginated(query: String, pageSize: Int, offset: Int): List<FactEntity> =
-        dao.searchFactPaginated(query, pageSize, offset)
-
     override fun getFact(factId: String): Flow<FactEntity?> = dao.getFact(factId)
-    override fun searchFact(query: String): Flow<List<FactEntity>> = dao.searchFact(query)
 
-    override fun loadFactsPaging(): Flow<PagingData<FactEntity>> {
+    override fun loadFactsPaging(organization: String): Flow<PagingData<FactEntity>> {
         return Pager(
             config = PagingConfig(pageSize = 10, enablePlaceholders = false),
-            pagingSourceFactory = { FactPagingSource(this, dao) }
+            pagingSourceFactory = { FactPagingSource(this, dao, organization) }
         ).flow
     }
+
+    override fun countFacts(): Flow<Int> = dao.countFacts()
 
 }
 

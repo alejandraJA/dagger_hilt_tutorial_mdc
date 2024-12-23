@@ -5,11 +5,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GetFactsUseCase @Inject constructor(
+class CountFactsUseCase @Inject constructor(
     private val factRepository: IFactRepository
 ) {
-    operator fun invoke(query: String?) =
-        if (query == null) factRepository.getFacts()
-        else factRepository.searchFact(query.trim())
+    operator fun invoke() = factRepository.countFacts()
 }
-

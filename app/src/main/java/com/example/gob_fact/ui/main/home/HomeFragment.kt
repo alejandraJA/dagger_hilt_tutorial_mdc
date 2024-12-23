@@ -17,12 +17,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingData
 import com.example.gob_fact.R
-import com.example.gob_fact.data.datasource.database.entities.FactEntity
 import com.example.gob_fact.databinding.FragmentMainBinding
 import com.example.gob_fact.ui.main.fact.FactFragment.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import com.example.gob_fact.ui.main.home.adapter.FactAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -31,7 +31,6 @@ class HomeFragment : Fragment() {
 
     lateinit var viewModel: HomeViewModel
     lateinit var binding: FragmentMainBinding
-    private val facts = mutableListOf<FactEntity>()
     private lateinit var adapter: FactAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,21 +76,19 @@ class HomeFragment : Fragment() {
     private fun initSearchFact() {
         binding.searchFactsView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                viewModel.searchQuery = query ?: ""
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let {
-
-                }
+                viewModel.searchQuery = newText ?: ""
                 return true
             }
         })
     }
 
     private fun initRecycler() {
-        adapter = FactAdapter(factInterface = { position ->
-            val fact = facts[position]
+        adapter = FactAdapter(factInterface = { fact ->
             val bundle = Bundle().apply {
                 putString("fact_id", fact.id)
             }
@@ -106,15 +103,17 @@ class HomeFragment : Fragment() {
     private fun setObservers() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.facts
-                    .catch {
-                        adapter.submitData(PagingData.empty())
-                        adapter.notifyDataSetChanged()
-                        Timber.tag("HomeFragment").e("Error: ${it.message}")
-                    }
-                    .collect { pagingData ->
-                        adapter.submitData(pagingData)
-                    }
+                viewModel.facts.catch {
+                    adapter.submitData(PagingData.empty())
+                    adapter.notifyDataSetChanged()
+                    Timber.tag("HomeFragment").e("Error: ${it.message}")
+                }.collect { pagingData ->
+                    adapter.submitData(pagingData)
+                }
+                viewModel.isEmptyFacts.collectLatest { count ->
+                    if (count != 0) binding.noDataLayout.visibility = View.VISIBLE
+                    else binding.noDataLayout.visibility = View.GONE
+                }
             }
         }
     }

@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
 import com.example.gob_fact.data.datasource.web.api.FactService
 import com.example.gob_fact.data.datasource.web.models.response.ApiSuccessResponse
+import com.example.gob_fact.domain.repository.IFactRepository
 import com.example.gob_fact.fake.FakeFactDao
 import com.example.gob_fact.fake.FakeFactService
 import com.example.gob_fact.sys.util.AppExecutors
@@ -42,7 +43,7 @@ class FactRepositoryTest {
     @Mock
     private lateinit var mockAppExecutors: AppExecutors
 
-    private lateinit var factRepository: FactRepository
+    private lateinit var factRepository: IFactRepository
 
     @Before
     fun setUp() {
@@ -60,87 +61,6 @@ class FactRepositoryTest {
 
         // Assert
         assert(fakeFactService.loadFacts().value is ApiSuccessResponse)
-    }
-
-    @Test
-    fun `deleteFacts should remove all facts`() {
-        // Arrange
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        // Act
-        factRepository.deleteFacts()
-
-        // Assert
-        assert(fakeFactDao.getFacts().value!!.isEmpty())
-    }
-
-    @Test
-    fun `getFacts should return all facts`() {
-        // Arrange
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-
-        // Act
-        val result = factRepository.getFacts()
-
-        // Assert
-        assert(result.value!!.isNotEmpty())
-    }
-
-    @Test
-    fun `getFacts should return empty list if no facts exist`() {
-        // Arrange
-        // Act
-        val result = factRepository.getFacts()
-
-        // Assert
-        assert(result.value!!.isEmpty())
-    }
-
-    @Test
-    fun `getFactsPaginated should return correct number of facts`() {
-        // Arrange
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-
-        // Act
-        val result = factRepository.getFactsPaginated(10, 0)
-
-        // Assert
-        assert(result.size == 10)
-    }
-
-    @Test
-    fun `searchFactPaginated should return correct number of facts`() {
-        // Arrange
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-
-        // Act
-        val result = factRepository.searchFactPaginated("organization", 10, 0)
-
-        // Assert
-        assert(result.size == 10)
     }
 
     @Test
@@ -164,20 +84,6 @@ class FactRepositoryTest {
 
         // Assert
         assert(result.value == null)
-    }
-
-    @Test
-    fun `searchFact should return correct facts`() {
-        // Arrange
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-        fakeFactDao.setFact(testFact)
-
-        // Act
-        val result = factRepository.searchFact("organization")
-
-        // Assert
-        assert(result.value!!.size == 3)
     }
 }
 

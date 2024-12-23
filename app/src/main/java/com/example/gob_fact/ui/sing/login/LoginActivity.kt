@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
@@ -64,12 +65,14 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun authenticateWithUsernameAndPassword() {
-        if (binding.layoutEmail.isNotBlank() && binding.layoutPassword.isNotBlank()) {
-            if (viewModel.login(
-                    userName = binding.inputEmail.text.toString().trim(),
-                    password = binding.inputPassword.text.toString().trim()
-                )
-            ) {
+        val widgetsIsNotBlank =
+            binding.layoutEmail.isNotBlank() && binding.layoutPassword.isNotBlank()
+        if (widgetsIsNotBlank) {
+            val isLogin = viewModel.login(
+                userName = binding.inputEmail.text.toString().trim(),
+                password = binding.inputPassword.text.toString().trim()
+            )
+            if (isLogin) {
                 navigateToActivity(MainActivity::class.java)
             }
         }
@@ -112,6 +115,7 @@ class LoginActivity : AppCompatActivity() {
 
     @SuppressLint("SourceLockedOrientationActivity")
     private fun setOtherConfigurations() {
+        enableEdgeToEdge()
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 }

@@ -1,6 +1,5 @@
 package com.example.gob_fact.data.datasource.web.repository
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.gob_fact.data.datasource.database.dao.FactDao
@@ -12,6 +11,7 @@ import timber.log.Timber
 class FactPagingSource(
     private val service: FactRepository,
     private val dao: FactDao,
+    private val organization: String,
 ) : PagingSource<Int, FactEntity>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, FactEntity> =
@@ -23,7 +23,10 @@ class FactPagingSource(
                 if (page == 0) page = 1
                 service.loadFacts(10, page)
 
-                val facts: List<FactEntity> = dao.getAllFacts() ?: emptyList()
+                val facts: MutableList<FactEntity> = mutableListOf()
+                dao.getAllFacts(organization)?.let { facts.addAll(it) }
+                if (facts.isEmpty())
+                    dao.getAllFacts()?.let { facts.addAll(it) }
                 isNextKey = facts.isEmpty()
 
                 LoadResult.Page(

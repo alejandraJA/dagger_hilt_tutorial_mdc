@@ -7,15 +7,15 @@ import com.example.gob_fact.databinding.ItemFactBinding
 
 class FactViewHolder(
     itemView: View,
-    private val movieInterface: (Int) -> Unit
+    private val movieInterface: (FactEntity) -> Unit
 ) : RecyclerView.ViewHolder(itemView) {
 
     private val binding = ItemFactBinding.bind(itemView)
 
-    fun bind(movieEntity: FactEntity) {
-        binding.fact = movieEntity
+    fun bind(factEntity: FactEntity) {
+        binding.fact = factEntity
         binding.cardFact.setOnClickListener {
-            movieInterface(absoluteAdapterPosition)
+            movieInterface(factEntity)
         }
     }
 

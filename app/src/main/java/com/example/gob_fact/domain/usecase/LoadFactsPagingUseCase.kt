@@ -8,5 +8,6 @@ import javax.inject.Singleton
 class LoadFactsPagingUseCase @Inject constructor(
     private val factRepository: IFactRepository
 ) {
-    operator fun invoke() = factRepository.loadFactsPaging()
+    operator fun invoke(organization: String) =
+        factRepository.loadFactsPaging(organization)
 }

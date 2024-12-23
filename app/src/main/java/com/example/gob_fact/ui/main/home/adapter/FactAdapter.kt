@@ -8,7 +8,7 @@ import com.example.gob_fact.R
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
 
 class FactAdapter(
-    private val factInterface: (Int) -> Unit
+    private val factInterface: (FactEntity) -> Unit
 ) : PagingDataAdapter<FactEntity, FactViewHolder>(FACT_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FactViewHolder {

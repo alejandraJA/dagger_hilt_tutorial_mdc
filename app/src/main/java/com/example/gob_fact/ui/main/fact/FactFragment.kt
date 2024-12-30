@@ -24,12 +24,13 @@ import com.example.gob_fact.databinding.FragmentFactBinding
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class FactFragment : Fragment() {
 
-    lateinit var viewModel: FactViewModel
+    private lateinit var viewModel: FactViewModel
     lateinit var binding: FragmentFactBinding
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
@@ -63,7 +64,7 @@ class FactFragment : Fragment() {
 
     private fun observeViewModel() {
         lifecycleScope.launch {
-            viewModel.fact.collect { fact ->
+            viewModel.fact.collectLatest { fact ->
                 fact?.let {
                     binding.fact = fact
                 }
@@ -200,8 +201,8 @@ class FactFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun showSnackBar(text: String) {
-        Snackbar.make(binding.root, text, Snackbar.LENGTH_LONG).show()
+    private fun showSnackBar(mesagge: String) {
+        Snackbar.make(binding.root, mesagge, Snackbar.LENGTH_LONG).show()
     }
 
     companion object {

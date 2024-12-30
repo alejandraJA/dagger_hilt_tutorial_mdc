@@ -7,6 +7,7 @@ import com.example.gob_fact.domain.usecase.GetFactUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,10 +30,8 @@ class FactViewModel @Inject constructor(
     fun loadFact() {
         _fact.apply {
             viewModelScope.launch {
-                getFactUseCase(_factId).let { factsResource ->
-                    factsResource.collect { facts ->
-                        value = facts ?: null
-                    }
+                getFactUseCase(_factId).collectLatest { facts ->
+                    value = facts
                 }
             }
         }

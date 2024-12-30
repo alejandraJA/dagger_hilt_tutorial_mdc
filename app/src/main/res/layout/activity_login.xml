@@ -1,85 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:padding="16sp"
-    tools:context=".ui.sing.login.LoginActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:orientation="vertical"
+              android:padding="16sp"
+              tools:context=".ui.sing.login.LoginActivity">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:text="@string/login_now"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="@string/login_now"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16sp"
-        android:hint="@string/email"
-        app:errorEnabled="true">
+            android:id="@+id/layout_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16sp"
+            android:hint="@string/email"
+            app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/input_email"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="textEmailAddress"
-            android:text="aejimenez@gmail.com" />
+                android:id="@+id/input_email"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textEmailAddress"
+                android:text="aejimenez@gmail.com"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_password"
-        style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/password"
-        app:errorEnabled="true"
-        app:passwordToggleEnabled="true">
+            android:id="@+id/layout_password"
+            style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            app:errorEnabled="true"
+            app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/input_password"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="textPassword"
-            android:text="ale.-112233" />
+                android:id="@+id/input_password"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textPassword"
+                android:text="ale.-112233"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/button_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:text="@string/login" />
+            android:id="@+id/button_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="@string/login"/>
 
     <TextView
-        android:id="@+id/text_or"
-        style="@style/TextAppearance.Material3.BodySmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:text="@string/or" />
+            android:id="@+id/text_or"
+            style="@style/TextAppearance.Material3.BodySmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:text="@string/or"/>
 
     <ImageView
-        android:id="@+id/image_fingerprint"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/fingerprint_24dp_e8eaed_fill0_wght400_grad0_opsz24" />
+            android:id="@+id/image_fingerprint"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/fingerprint"
+            android:src="@drawable/fingerprint_24dp_e8eaed_fill0_wght400_grad0_opsz24"/>
 
     <TextView
-        android:id="@+id/text_fingerprint"
-        style="@style/TextAppearance.Material3.TitleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/fingerprint" />
+            android:id="@+id/text_fingerprint"
+            style="@style/TextAppearance.Material3.TitleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/fingerprint"/>
 
 </LinearLayout>

@@ -18,7 +18,6 @@ import com.example.gob_fact.ui.main.MainActivity
 import com.example.gob_fact.ui.sing.login.LoginActivity
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.UUID
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,8 +30,6 @@ class SingInActivity : AppCompatActivity() {
 
     @Inject
     lateinit var credentialManager: CredentialManager
-
-    private val nonce by lazy { UUID.randomUUID().toString() }
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {

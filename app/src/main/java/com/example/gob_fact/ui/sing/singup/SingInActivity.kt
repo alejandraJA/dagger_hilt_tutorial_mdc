@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -12,11 +13,18 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.credentials.CredentialManager
 import androidx.lifecycle.ViewModelProvider
+import com.example.gob_fact.R
 import com.example.gob_fact.databinding.ActivitySingInBinding
 import com.example.gob_fact.sys.util.UtilsText.isNotBlank
 import com.example.gob_fact.ui.main.MainActivity
 import com.example.gob_fact.ui.sing.login.LoginActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -27,9 +35,11 @@ class SingInActivity : AppCompatActivity() {
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
     private lateinit var viewModel: SingInViewModel
+    private lateinit var googleSignInClient: GoogleSignInClient
 
-    @Inject
-    lateinit var credentialManager: CredentialManager
+    companion object {
+        private const val RC_SIGN_IN = 9001
+    }
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,9 +59,53 @@ class SingInActivity : AppCompatActivity() {
             finish()
         }
         binding.signInButton.setOnClickListener {
-//            signInWithGoogle()
+            signInWithGoogle()
         }
         binding.buttonSingIn.setOnClickListener { handleSignInButtonClick() }
+    }
+
+    private fun signInWithGoogle() {
+        // Configura Google Sign-In
+        val gso = GoogleSignInOptions
+            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestIdToken(getString(R.string.default_web_client_id)) // Client ID en google-services.json
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        // Inicia el flujo de inicio de sesión
+        val signInIntent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)!!
+                firebaseAuthWithGoogle(account.idToken!!)
+            } catch (e: ApiException) {
+                Log.e("GoogleSignIn", "Google sign-in failed", e)
+                showSnackBar("Google sign-in failed: ${e.message}")
+            }
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        FirebaseAuth.getInstance().signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Inicio de sesión exitoso
+                    showSnackBar("Authentication successful!!")
+                } else {
+                    // Fallo en la autenticación
+                    showSnackBar("Authentication failed: ${task.exception?.message}")
+                }
+            }
     }
 
     private fun handleSignInButtonClick() {

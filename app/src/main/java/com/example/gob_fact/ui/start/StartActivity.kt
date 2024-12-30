@@ -17,8 +17,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.gob_fact.R
 import com.example.gob_fact.databinding.ActivityStartBinding
+import com.example.gob_fact.ui.main.MainActivity
 import com.example.gob_fact.ui.main.fact.FactFragment.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import com.example.gob_fact.ui.sing.login.LoginActivity
+import com.example.gob_fact.ui.sing.singup.SingInActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -52,8 +54,8 @@ class StartActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.facts.collect {
-                    if (checkLocationPermissions())
-                        navigateToLoginActivity()
+                    if (!checkLocationPermissions())
+                        navigateToAuthentication()
                     else
                         requestLocationPermissions()
                 }
@@ -78,11 +80,14 @@ class StartActivity : AppCompatActivity() {
             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
             LOCATION_PERMISSION_REQUEST_CODE
         )
-        navigateToLoginActivity()
+        navigateToAuthentication()
     }
 
-    private fun navigateToLoginActivity() {
-        startActivity(Intent(this, LoginActivity::class.java))
+    private fun navigateToAuthentication() {
+        if (viewModel.isUserRegistered)
+            startActivity(Intent(this, LoginActivity::class.java))
+        else
+            startActivity(Intent(this, SingInActivity::class.java))
         finish()
     }
 

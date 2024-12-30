@@ -1,6 +1,6 @@
 package com.example.gob_fact.ui.act.login
 
-import com.example.gob_fact.domain.StorageRepository
+import com.example.gob_fact.domain.AuthenticationRepository
 import com.example.gob_fact.fake.FakeStorage
 import com.example.gob_fact.sys.util.Constants
 import com.example.gob_fact.ui.sing.login.LoginViewModel
@@ -12,13 +12,13 @@ import org.junit.Test
 class LoginViewModelTest {
 
     private lateinit var viewModel: LoginViewModel
-    private lateinit var repository: StorageRepository
+    private lateinit var repository: AuthenticationRepository
     private lateinit var fakeStorage: FakeStorage
 
     @Before
     fun setUp() {
         fakeStorage = FakeStorage()
-        repository = StorageRepository(fakeStorage)
+        repository = AuthenticationRepository(fakeStorage)
         viewModel = LoginViewModel(repository)
     }
 

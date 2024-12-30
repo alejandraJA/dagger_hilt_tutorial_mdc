@@ -9,29 +9,29 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
-class StorageRepositoryTest {
+class AuthenticationRepositoryTest {
 
-    private lateinit var storageRepository: StorageRepository
+    private lateinit var authenticationRepository: AuthenticationRepository
     private val fakeStorage: IStorage = FakeStorage()
 
     @Before
     fun setUp() {
-        storageRepository = StorageRepository(fakeStorage)
+        authenticationRepository = AuthenticationRepository(fakeStorage)
     }
 
     @Test
     fun isEnableBiometric() {
         val expectedValue = true
-        storageRepository.isEnableBiometric = expectedValue
-        val actualValue = storageRepository.isEnableBiometric
+        authenticationRepository.isEnableBiometric = expectedValue
+        val actualValue = authenticationRepository.isEnableBiometric
         assertEquals(expectedValue, actualValue)
     }
 
     @Test
     fun setEnableBiometric() {
         val expectedValue = false
-        storageRepository.isEnableBiometric = expectedValue
-        val actualValue = storageRepository.isEnableBiometric
+        authenticationRepository.isEnableBiometric = expectedValue
+        val actualValue = authenticationRepository.isEnableBiometric
         assertEquals(expectedValue, actualValue)
     }
 
@@ -39,7 +39,7 @@ class StorageRepositoryTest {
     fun registerUser() {
         val expectedUserName = "test"
         val expectedPassword = "test"
-        storageRepository.registerUser(expectedUserName, expectedPassword)
+        authenticationRepository.registerUser(expectedUserName, expectedPassword)
         val actualUserName = fakeStorage.getString(REGISTERED_USER)
         val actualPassword = fakeStorage.getString("$expectedUserName$PASSWORD")
         assertEquals(expectedUserName, actualUserName)
@@ -49,23 +49,23 @@ class StorageRepositoryTest {
     @Test
     fun isUserRegistered() {
         val expectedValue = true
-        storageRepository.registerUser("test", "test")
-        val actualValue = storageRepository.isUserRegistered()
+        authenticationRepository.registerUser("test", "test")
+        val actualValue = authenticationRepository.isUserRegistered()
         assertEquals(expectedValue, actualValue)
     }
 
     @Test
     fun loginUser() {
         val expectedValue = true
-        storageRepository.registerUser("test", "test")
-        val actualValue = storageRepository.loginUser("test", "test")
+        authenticationRepository.registerUser("test", "test")
+        val actualValue = authenticationRepository.loginUser("test", "test")
         assertEquals(expectedValue, actualValue)
     }
 
     @Test
     fun unregister() {
-        storageRepository.registerUser("test", "test")
-        storageRepository.unregister()
+        authenticationRepository.registerUser("test", "test")
+        authenticationRepository.unregister()
         val actualUserName = fakeStorage.getString("REGISTERED_USER")
         val actualPassword = fakeStorage.getString("testPASSWORD")
         assertEquals("", actualUserName)

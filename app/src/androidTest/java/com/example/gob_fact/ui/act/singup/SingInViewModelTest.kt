@@ -1,6 +1,6 @@
 package com.example.gob_fact.ui.act.singup
 
-import com.example.gob_fact.domain.StorageRepository
+import com.example.gob_fact.domain.AuthenticationRepository
 import com.example.gob_fact.fake.FakeStorage
 import com.example.gob_fact.sys.util.Constants.BIOMETRIC
 import com.example.gob_fact.sys.util.Constants.PASSWORD
@@ -14,13 +14,13 @@ import org.junit.Test
 class SingInViewModelTest {
 
     private lateinit var viewModel: SingInViewModel
-    private lateinit var repository: StorageRepository
+    private lateinit var repository: AuthenticationRepository
     private lateinit var fakeStorage: FakeStorage
 
     @Before
     fun setUp() {
         fakeStorage = FakeStorage()
-        repository = StorageRepository(fakeStorage)
+        repository = AuthenticationRepository(fakeStorage)
         viewModel = SingInViewModel(repository)
     }
 

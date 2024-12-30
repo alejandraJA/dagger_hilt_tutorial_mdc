@@ -13,9 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.gob_fact.databinding.ActivityLoginBinding
 import com.example.gob_fact.sys.util.UtilsText.isNotBlank
 import com.example.gob_fact.ui.main.MainActivity
-import com.example.gob_fact.ui.sing.singup.SingInActivity
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,7 +29,6 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupUI()
-        observeViewModel()
         setOtherConfigurations()
     }
 
@@ -54,27 +51,22 @@ class LoginActivity : AppCompatActivity() {
         binding.textOr.visibility = View.GONE
     }
 
-    private fun observeViewModel() {
-        viewModel.userName.observe(this) {
-            if (!it) {
-                navigateToActivity(SingInActivity::class.java)
-            } else if (FirebaseAuth.getInstance().currentUser != null) {
-                navigateToActivity(MainActivity::class.java)
-            }
-        }
-    }
-
     private fun authenticateWithUsernameAndPassword() {
         val widgetsIsNotBlank =
             binding.layoutEmail.isNotBlank() && binding.layoutPassword.isNotBlank()
         if (widgetsIsNotBlank) {
-            val isLogin = viewModel.login(
-                userName = binding.inputEmail.text.toString().trim(),
-                password = binding.inputPassword.text.toString().trim()
+            val userName = binding.inputEmail.text.toString().trim()
+            val password = binding.inputPassword.text.toString().trim()
+            viewModel.login(
+                userName = userName,
+                password = password,
+                onSuccess = {
+                    navigateToActivity(MainActivity::class.java)
+                },
+                onError = {
+                    showSnackBar(it)
+                }
             )
-            if (isLogin) {
-                navigateToActivity(MainActivity::class.java)
-            }
         }
     }
 

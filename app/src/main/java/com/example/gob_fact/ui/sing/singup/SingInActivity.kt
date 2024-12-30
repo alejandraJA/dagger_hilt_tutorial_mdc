@@ -12,11 +12,10 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.credentials.CredentialManager
 import androidx.lifecycle.ViewModelProvider
-import com.example.gob_fact.R
 import com.example.gob_fact.databinding.ActivitySingInBinding
-import com.example.gob_fact.domain.GoogleAuthenticator
 import com.example.gob_fact.sys.util.UtilsText.isNotBlank
 import com.example.gob_fact.ui.main.MainActivity
+import com.example.gob_fact.ui.sing.login.LoginActivity
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.UUID
@@ -48,6 +47,10 @@ class SingInActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     private fun setupUI() {
+        binding.doYouHaveAnAccount.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
         binding.signInButton.setOnClickListener {
 //            signInWithGoogle()
         }
@@ -55,20 +58,23 @@ class SingInActivity : AppCompatActivity() {
     }
 
     private fun handleSignInButtonClick() {
-        if (binding.layoutEmail.isNotBlank() && binding.layoutPassword.isNotBlank()) {
-            if (binding.checkboxEnableBiometric.isChecked) {
-                setupBiometricAuthentication(
-                    userName = binding.inputEmail.text.toString().trim(),
-                    password = binding.inputPassword.text.toString().trim()
-                )
-            } else {
-                viewModel.singIn(
-                    userName = binding.inputEmail.text.toString().trim(),
-                    password = binding.inputPassword.text.toString().trim()
-                )
+        if (!(binding.layoutEmail.isNotBlank() && binding.layoutPassword.isNotBlank()))
+            return
+        if (binding.checkboxEnableBiometric.isChecked) setupBiometricAuthentication()
+        else singIn()
+    }
+
+    private fun singIn() {
+        viewModel.singIn(
+            userName = binding.inputEmail.text.toString().trim(),
+            password = binding.inputPassword.text.toString().trim(),
+            onSuccess = {
                 navigateToMainActivity()
+            },
+            onError = {
+                showSnackBar(it)
             }
-        }
+        )
     }
 
     private fun navigateToMainActivity() {
@@ -82,19 +88,16 @@ class SingInActivity : AppCompatActivity() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
-    private fun setupBiometricAuthentication(
-        userName: String,
-        password: String
-    ) {
+    private fun setupBiometricAuthentication() {
         val executor = ContextCompat.getMainExecutor(this)
         biometricPrompt =
             BiometricPrompt(this, executor, object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                    handleBiometricAuthenticationError(errorCode, errString, userName, password)
+                    handleBiometricAuthenticationError(errorCode, errString)
                 }
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                    handleBiometricAuthenticationSuccess()
+                    singInWithBiometricUserAndPassword()
                 }
 
                 override fun onAuthenticationFailed() {
@@ -113,26 +116,24 @@ class SingInActivity : AppCompatActivity() {
 
     private fun handleBiometricAuthenticationError(
         errorCode: Int,
-        errString: CharSequence,
-        userName: String,
-        password: String
+        errString: CharSequence
     ) {
         if (errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON) {
             binding.checkboxEnableBiometric.isChecked = false
-            viewModel.singIn(userName, password)
-            navigateToMainActivity()
+            singIn()
         } else {
             showSnackBar("Authentication error: $errString $errorCode")
         }
     }
 
-    private fun handleBiometricAuthenticationSuccess() {
-        viewModel.enableBiometric()
-        viewModel.singIn(
-            userName = binding.inputEmail.text.toString().trim(),
-            password = binding.inputPassword.text.toString().trim()
-        )
-        navigateToMainActivity()
+    private fun singInWithBiometricUserAndPassword() {
+        val userName = binding.inputEmail.text.toString().trim()
+        val password = binding.inputPassword.text.toString().trim()
+        viewModel.loginWithEmailPasswordBiometric(userName, password, {
+            navigateToMainActivity()
+        }, {
+            showSnackBar(it)
+        })
     }
 
     private fun showSnackBar(message: String) {

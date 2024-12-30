@@ -3,6 +3,7 @@ package com.example.gob_fact.ui.start
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gob_fact.data.datasource.database.entities.FactEntity
+import com.example.gob_fact.domain.AuthenticationRepository
 import com.example.gob_fact.domain.usecase.LoadFactsUseCase
 import com.example.gob_fact.sys.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +15,10 @@ import javax.inject.Inject
 @HiltViewModel
 class StartViewModel @Inject constructor(
     private val loadFactsUseCase: LoadFactsUseCase,
+    private val authenticationRepository: AuthenticationRepository
 ) : ViewModel() {
+
+    val isUserRegistered get() = authenticationRepository.isUserRegistered()
 
     private val _facts: MutableStateFlow<List<FactEntity>> =
         MutableStateFlow<List<FactEntity>>(emptyList()).apply {

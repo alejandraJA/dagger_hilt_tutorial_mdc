@@ -18,19 +18,19 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
         android:id="@+id/layout_email"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16sp"
         android:hint="@string/email"
         app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
             android:id="@+id/input_email"
-            android:text="123"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:text="aejimenez@gmail.com" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -45,9 +45,9 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/input_password"
             android:layout_width="match_parent"
-            android:text="123"
             android:layout_height="match_parent"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:text="ale.-112233" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
@@ -59,27 +59,27 @@
 
     <TextView
         android:id="@+id/text_or"
-        android:layout_width="wrap_content"
         style="@style/TextAppearance.Material3.BodySmall"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_gravity="center"
-        android:text="@string/or"/>
+        android:layout_marginTop="16dp"
+        android:text="@string/or" />
 
     <ImageView
+        android:id="@+id/image_fingerprint"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="16dp"
-        android:id="@+id/image_fingerprint"
         android:layout_gravity="center"
+        android:layout_marginTop="16dp"
         android:src="@drawable/fingerprint_24dp_e8eaed_fill0_wght400_grad0_opsz24" />
 
     <TextView
         android:id="@+id/text_fingerprint"
+        style="@style/TextAppearance.Material3.TitleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/TextAppearance.Material3.TitleSmall"
         android:layout_gravity="center"
-        android:text="@string/fingerprint"/>
+        android:text="@string/fingerprint" />
 
 </LinearLayout>

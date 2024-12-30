@@ -57,6 +57,13 @@
         android:layout_gravity="end"
         android:text="@string/login" />
 
+    <com.google.android.gms.common.SignInButton
+            android:id="@+id/button_login_with_google"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp" />
+
     <TextView
         android:id="@+id/text_or"
         android:layout_width="wrap_content"

@@ -4,7 +4,9 @@ import com.example.gob_fact.data.datasource.storage.IStorage
 import com.example.gob_fact.sys.util.Constants.BIOMETRIC
 import com.example.gob_fact.sys.util.Constants.PASSWORD
 import com.example.gob_fact.sys.util.Constants.REGISTERED_USER
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import javax.inject.Inject
 
 class AuthenticationRepository @Inject constructor(private val storage: IStorage) {
@@ -64,21 +66,33 @@ class AuthenticationRepository @Inject constructor(private val storage: IStorage
             else
                 onError("Incorrect password")
         }
-         auth.signInWithEmailAndPassword(userName, password).addOnCompleteListener {
-             if (it.isSuccessful) {
-                 this.userName = userName
-                 this.password = password
-                 onSuccess()
-             } else {
-                 onError(it.exception?.message ?: "Authentication failed")
-             }
-         }
+        auth.signInWithEmailAndPassword(userName, password).addOnCompleteListener {
+            if (it.isSuccessful) {
+                this.userName = userName
+                this.password = password
+                onSuccess()
+            } else {
+                onError(it.exception?.message ?: "Authentication failed")
+            }
+        }
     }
 
-    fun unregister() {
-        storage.setString(REGISTERED_USER, "")
-        storage.setString("$userName$PASSWORD", "")
-        auth.signOut()
+    fun registerUserWithGoogle(
+        account: GoogleSignInAccount,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+        auth.signInWithCredential(credential).addOnCompleteListener {
+            if (it.isSuccessful) {
+                val userName = account.displayName ?: ""
+                this.userName = userName
+                onSuccess()
+            } else {
+                onError(it.exception?.message ?: "Authentication failed")
+            }
+        }
     }
+
 
 }

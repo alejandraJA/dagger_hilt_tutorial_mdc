@@ -2,6 +2,7 @@ package com.example.gob_fact.ui.sing.singup
 
 import androidx.lifecycle.ViewModel
 import com.example.gob_fact.domain.AuthenticationRepository
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -39,4 +40,10 @@ class SingInViewModel @Inject constructor(
             onSuccess()
         }, onError)
     }
+
+    fun firebaseAuthWithGoogle(
+        account: GoogleSignInAccount,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) = authenticationRepository.registerUserWithGoogle(account, onSuccess, onError)
 }
